@@ -12,7 +12,7 @@ class JoinController extends Controller
     {
         $tableNames = DB::select('SHOW TABLES');
         $tableNames = array_map('current', $tableNames);
-        return view('dynamicJoin.index', ['tableNames' => $tableNames]);
+        return view('adminViewCreate.index', ['tableNames' => $tableNames]);
     }
 
     public function fetch(Request $request)
@@ -93,7 +93,7 @@ class JoinController extends Controller
         Report::create(['view' => $data]);
         echo "<pre>";
 
-        return redirect()->route('dynamicJoin.index');
+        return redirect()->route('adminViewCreate.index');
         // unset($request['_token']);
         // unset($request['table']);
         // print_r($request->all());

@@ -7,6 +7,7 @@ use App\Http\Controllers\DynamicDependentController;
 use App\Http\Controllers\Automatic;
 use App\Http\Controllers\JoinController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ViewReportListController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,10 +40,12 @@ Route::get('/automatic', [Automatic::class, 'index'])->name('automatic.index');
 Route::post('/automatic/fetch', [Automatic::class, 'fetch'])->name('automatic.fetch');
 Route::post('/automatic/fetch_datas', [Automatic::class, 'fetch_datas'])->name('automatic.fetch_datas');
 
-Route::get('/join', [JoinController::class, 'index'])->name('dynamicJoin.index');
-Route::post('/join/fetch', [JoinController::class, 'fetch'])->name('dynamicJoin.fetch');
-Route::post('/join/fetch_datas', [JoinController::class, 'fetch_datas'])->name('dynamicJoin.fetch_datas');
-Route::post('/join/fetch_join_datas', [JoinController::class, 'fetch_join_datas'])->name('dynamicJoin.fetch_join_datas');
-Route::post('/join', [JoinController::class, 'processForm'])->name('dynamicJoin.processForm');
+Route::get('/join', [JoinController::class, 'index'])->name('adminViewCreate.index');
+Route::post('/join/fetch', [JoinController::class, 'fetch'])->name('adminViewCreate.fetch');
+Route::post('/join/fetch_datas', [JoinController::class, 'fetch_datas'])->name('adminViewCreate.fetch_datas');
+Route::post('/join/fetch_join_datas', [JoinController::class, 'fetch_join_datas'])->name('adminViewCreate.fetch_join_datas');
+Route::post('/join', [JoinController::class, 'processForm'])->name('adminViewCreate.processForm');
 
 Route::get('/view-report', [ReportController::class, 'index']);
+
+Route::get('/view-report-list', [ViewReportListController::class, 'index']);

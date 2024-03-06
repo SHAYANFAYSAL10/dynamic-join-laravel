@@ -241,7 +241,7 @@ class ReportController extends Controller
         //     echo "<br>";
         // }
         // dd($result);
-        return view('jsonjoin.index', ['data' => $result]);
+        return view('viewReport.index', ['data' => $result]);
         // return view('jsonjoin.index',"hello");
     }
 }

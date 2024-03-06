@@ -7,7 +7,7 @@ export function columnNameRetriever() {
         var dependent = $(this).data("dependent");
         var _token = $('input[name="_token"').val();
         $.ajax({
-            url: route("dynamicJoin.fetch"),
+            url: route("adminViewCreate.fetch"),
             method: "POST",
             data: {
                 value: value,
