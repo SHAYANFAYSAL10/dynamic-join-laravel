@@ -68,7 +68,7 @@ document.addEventListener("DOMContentLoaded", function () {
         allDynamic.forEach(function (selectElement) {
             tableNames.push(selectElement.value);
         });
-        console.log(this);
+        // console.log(this);
         matchingTableRetriever();
     }
 
@@ -158,17 +158,18 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function matchingTableRetriever() {
-        console.log(this);
+        // console.log(this);
         let jointablenames = document.querySelectorAll(".jointablenames");
         jointablenames.forEach(function (tableName) {
-            // console.log(tableName);
+            let numericPart = tableName.id.match(/\d+$/);
+            console.log(tableName);
             tableName.innerHTML = `<option value="" disabled selected>Select Join Table</option>`;
-            tableNames.forEach(function (table) {
+            for (let i = 0; i <= numericPart; i++) {
                 let newOption = document.createElement("option");
-                newOption.value = table;
-                newOption.text = table;
+                newOption.value = tableNames[i];
+                newOption.text = tableNames[i];
                 tableName.appendChild(newOption);
-            });
+            }
         });
     }
 
