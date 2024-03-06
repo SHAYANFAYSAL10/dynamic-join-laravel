@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Dynamic View</h1>
+    <form>
+        @csrf
+        <div>
+            <select name="tablename" id="tablename" class="dynamic" data-dependent="columnname">
+                <option value="">Select Table</option>
+                @foreach ($tableNames as $tableName)
+                    <option value="{{ $tableName->tablename }}">{{ $tableName->tablename }}</option>
+                @endforeach
+            </select>
+        </div>
+        <br />
+        <div>
+            <select name="columnname" id="columnname" class="dynamicdatas" data-dependent="datas" multiple>
+                <option value="">Select Columns</option>
+            </select>
+        </div>
+        {{ csrf_field() }}
+    </form>
+    <div>
+        <form action="">
+            @csrf
+            <table border="1" name="datas" class="datas" id="selectedValues">
+                <tr id="selectedList">
+                </tr>
+            </table>
+
+        </form>
+    </div>
+
+</body>
+
+</html>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.dynamic').change(function() {
+            if ($(this).val() != '') {
+                var select = $(this).attr("id");
+                var value = $(this).val();
+                var dependent = $(this).data('dependent');
+                var _token = $('input[name="_token"').val();
+                $.ajax({
+                    url: "{{ route('dynamicInfoViewer.fetch') }}",
+                    method: "POST",
+                    data: {
+                        select: select,
+                        value: value,
+                        _token: _token,
+                        dependent: dependent
+                    },
+                    success: function(result) {;
+                        $('#' + dependent).html(result);
+                    }
+                })
+            }
+        });
+    });
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        function updateTablename() {
+            selectedTable = tablename.value;
+        }
+
+        var tablename = document.getElementById('tablename');
+        var selectedTable;
+
+        tablename.addEventListener('change', updateTablename);
+
+        var selectedValues = [];
+
+        function updateSelectedValues() {
+            selectedValues = [];
+            var selectElement = document.getElementById('columnname');
+            var selectedListElement = document.getElementById('selectedList');
+
+            for (var i = 0; i < selectElement.options.length; i++) {
+                if (selectElement.options[i].selected) {
+                    selectedValues.push(selectElement.options[i].value);
+                }
+            }
+
+            selectedListElement.innerHTML = '';
+            var tableHeaders=document.createElement('tr');
+            selectedValues.forEach(function(value) {
+                var listItem = document.createElement('th');
+                listItem.textContent = value;
+                tableHeaders.appendChild(listItem);
+            });
+            selectedListElement.appendChild(tableHeaders);
+
+            $(document).ready(function() {
+                $('.dynamicdatas').change(function() {
+                    console.log(1);
+                    if ($(this).val() != '') {
+                        var value = $(this).val();
+                        var dependent = $(this).data('dependent');
+                        var _token = $('input[name="_token"').val();
+                        $.ajax({
+                            url: "{{ route('dynamicInfoViewer.fetch_datas') }}",
+                            method: "POST",
+                            data: {
+                                tableName: selectedTable,
+                                select: selectedValues,
+                                value: value,
+                                _token: _token,
+                                dependent: dependent
+                            },
+                            success: function(response) {
+                                response.data.forEach(function (entry, index) {
+                                    var numberOfFeatures = Object.keys(entry).length;
+                                    var tableRows = document.createElement('tr');
+                                    for (var feature in entry) {
+                                        if (entry.hasOwnProperty(feature)) {
+                                            var listItem = document.createElement('td');
+                                            listItem.textContent = entry[feature];
+                                            tableRows.appendChild(listItem);
+                                        }
+                                    }
+                                    selectedListElement.appendChild(tableRows);
+                                });
+                            }
+                        })
+                    }
+                });
+            });
+        }
+        var columnName = document.getElementById('columnname');
+        columnName.addEventListener('change', updateSelectedValues);
+    });
+</script>

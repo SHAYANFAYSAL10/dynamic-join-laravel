@@ -1,0 +1,6 @@
+1. as - done
+2. change table names - done
+3. use eloquent - done
+4. show data in a table - done
+5. learn flatmap, reduce, collection - partially done
+6. for cross join - done

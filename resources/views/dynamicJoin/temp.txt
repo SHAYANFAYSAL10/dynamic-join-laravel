@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+</head>
+
+<body>
+    <h1>Dynamic Join</h1>
+    <form>
+        @csrf
+        <div>
+            <select name="leftTable" id="leftTable" class="dynamic" data-dependent="leftTableColumns">
+                <option disabled selected value="">Select Table</option>
+                @foreach ($tableNames as $tableName)
+                    <option value="{{ $tableName }}">{{ $tableName }}</option>
+                @endforeach
+            </select>
+        </div>
+        <br />
+        <div>
+            <select name="leftTableColumns" id="leftTableColumns" class="dynamicdatas" data-dependent="leftTableDatas" multiple>
+                <option value="">Select Columns</option>
+            </select>
+        </div>
+        {{ csrf_field() }}
+    </form>
+    <!-- <div>
+        <form action="">
+            @csrf
+            <table border="1" name="leftTableDatas" class="selectedValues" id="leftTableDatas">
+                <tr id="selectedList">
+                </tr>
+            </table>
+            {{ csrf_field() }}
+        </form>
+    </div> -->
+    <br/>
+
+    <form>
+        @csrf
+        <div>
+            <select name="rightTable" id="rightTable" class="dynamic" data-dependent="rightTableColumns">
+                <option disabled selected value="">Select Table</option>
+                @foreach ($tableNames as $tableName)
+                    <option value="{{ $tableName }}">{{ $tableName }}</option>
+                @endforeach
+            </select>
+        </div>
+        <br />
+        <div>
+            <select name="rightTableColumns" id="rightTableColumns" class="dynamicdatas" data-dependent="rightTableDatas" multiple>
+                <option value="">Select Columns</option>
+            </select>
+        </div>
+        {{ csrf_field() }}
+    </form>
+    <br/>
+
+    <div>
+    <select id="joinType">
+        <option disabled selected value="">Select Join Type</option>
+        <option selected value="inner">Inner Join</option>
+        <option selected value="left">Left Join</option>
+        <option selected value="right">Tight Join</option>
+        <option selected value="cross">Cross Join</option>
+    </select>
+    </div>
+    <!-- <div>
+        <form action="">
+            @csrf
+            <table border="1" name="rightTableDatas" class="selectedValues" id="rightTableDatas">
+                <tr id="selectedList">
+                </tr>
+            </table>
+            {{ csrf_field() }}
+        </form>
+    </div> -->
+
+</body>
+
+</html>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('.dynamic').change(function() {
+            if ($(this).val() != '') {
+                var currentId = $(this).attr("id");
+                var value = $(this).val();
+                var dependent = $(this).data('dependent');
+                var _token = $('input[name="_token"').val();
+                $.ajax({
+                    url: "{{ route('dynamicJoin.fetch') }}",
+                    method: "POST",
+                    data: {
+                        value: value,
+                        _token: _token,
+                        dependent: dependent
+                    },
+                    // success: function(result) {
+                    //     ;
+                    //     $('#' + dependent).html(result);
+                    // }
+                    success: function(response) {
+                        var columnName=document.getElementById(response.dependent);
+                        columnName.innerHTML = '';
+                        response.data.forEach(function(entry, index) {
+                            var numberOfFeatures = Object.keys(entry).length;
+                            var columnOption = document.createElement('option');
+                            columnOption.textContent = entry;
+                            columnName.appendChild(columnOption);
+                        });
+                    }
+                })
+            }
+        });
+    });
+
+
+
+    document.addEventListener('DOMContentLoaded', function() {
+        function updateTablename() {
+            // selectedTable = this.value;
+            // table.innerHTML = '';
+            // selectedListElement.innerHTML = '';
+            if($(this).attr("id")==='leftTable')
+            {
+                selectedLeftTable=this.value;
+            }
+            else
+            {
+                selectedRightTable=this.value;
+            }
+        }
+
+        var leftTable = document.getElementById('leftTable');
+        var rightTable = document.getElementById('rightTable');
+        var selectedLeftTable;
+        var selectedRightTable;
+
+        leftTable.addEventListener('change', updateTablename);
+        rightTable.addEventListener('change', updateTablename);
+
+        var leftTableValues = [];
+        var rightTableValues = [];
+
+        var leftTableColumns = document.getElementById('leftTableColumns');
+        var rightTableColumns = document.getElementById('rightTableColumns');
+
+        // var selectElement = document.getElementById('leftTableColumns');
+        var selectedListElement;// = document.getElementById('leftTableDatas');
+
+        function updateSelectedValues() {
+            console.log($(this).attr("id"));
+            if($(this).attr("id")==='leftTableColumns')
+            {
+                leftTableValues = [];
+
+                for (var i = 0; i < this.options.length; i++) {
+                    if (this.options[i].selected) {
+                        leftTableValues.push(this.options[i].value);
+                    }
+                }
+            }
+            else
+            {
+                rightTableValues = [];
+
+                for (var i = 0; i < this.options.length; i++) {
+                    if (this.options[i].selected) {
+                        rightTableValues.push(this.options[i].value);
+                    }
+                }
+            }
+
+            // console.log(leftTableValues);
+            // console.log(rightTableValues);
+
+            // selectedListElement.innerHTML = '';
+            // var tableHeaders = document.createElement('tr');
+            // selectedValues.forEach(function(value) {
+            //     var listItem = document.createElement('th');
+            //     listItem.textContent = value;
+            //     tableHeaders.appendChild(listItem);
+            // });
+            // selectedListElement.appendChild(tableHeaders);
+
+        }
+        leftTableColumns.addEventListener('change', updateSelectedValues);
+        rightTableColumns.addEventListener('change', updateSelectedValues);
+        $(document).ready(function() {
+            $('.dynamicdatas').change(function() {
+                // console.log("hello");
+                // $('.dynamicdatas').off('change').on('change', function() {
+                // console.log($(this).attr("id"));
+                if ($(this).val() != '') {
+                    // var value = $(this).val();
+                    // console.log(value);
+                    // var dependent = $(this).data('dependent');
+                    // console.log(dependent);
+                    // selectedListElement = document.getElementById(dependent);
+                    console.log(leftTableValues);
+                    console.log(rightTableValues);
+                    console.log(selectedLeftTable);
+                    console.log(selectedRightTable);
+                    // console.log(selectedListElement);
+                    // updateSelectedValues();
+                    var _token = $('input[name="_token"').val();
+                    // $.ajax({
+                    //     url: "{{ route('dynamicJoin.fetch_datas') }}",
+                    //     method: "POST",
+                    //     data: {
+                    //         tableName: selectedTable,
+                    //         select: selectedValues,
+                    //         value: value,
+                    //         _token: _token,
+                    //         dependent: dependent
+                    //     },
+                    //     success: function(response) {
+                    //         // selectedListElement
+                    //         response.data.forEach(function(entry, index) {
+                    //             var numberOfFeatures = Object.keys(entry).length;
+                    //             var tableRows = document.createElement('tr');
+                    //             for (var feature in entry) {
+                    //                 if (entry.hasOwnProperty(feature)) {
+                    //                     var listItem = document.createElement('td');
+                    //                     listItem.textContent = entry[feature];
+                    //                     tableRows.appendChild(listItem);
+                    //                 }
+                    //             }
+                    //             selectedListElement.appendChild(tableRows);
+                    //         });
+                    //     }
+                    // });
+                }
+            });
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="joinOnDiv">
+        <select id="leftMatchingColumn" class="dynamicdatas" style="display: none"></select>
+        <select id="rightMatchingColumn" class="dynamicdatas" style="display: none"></select>
+    </div>
+
+
+
+
+
+        function updateJoinDiv() {
+            leftJoinColumns.innerHTML = '';
+            rightJoinColumns.innerHTML = '';
+            joinType = tablesJoin.value;
+            if(joinType==='inner'||joinType==='left'||joinType==='right')
+            {
+                leftJoinColumns.style.display = "inline";
+                rightJoinColumns.style.display = "inline";
+
+                leftTableAllOptions = [];
+                rightTableAllOptions = [];
+
+                for (var i = 0; i < leftTableColumns.options.length; i++) {
+                    leftTableAllOptions.push(leftTableColumns.options[i].value);
+                }
+
+                for (var i = 0; i < rightTableColumns.options.length; i++) {
+                    rightTableAllOptions.push(rightTableColumns.options[i].value);
+                }
+
+                leftTableAllOptions.forEach(element => {
+                    var listItem = document.createElement('option');
+                    listItem.text = element;
+                    listItem.value = element;
+                    leftJoinColumns.appendChild(listItem);
+                });
+                rightTableAllOptions.forEach(element => {
+                    var listItem = document.createElement('option');
+                    listItem.text = element;
+                    listItem.value = element;
+                    rightJoinColumns.appendChild(listItem);
+                });
+
+                matchOnLeft = leftJoinColumns.value;
+                matchOnRight = rightJoinColumns.value;
+            }
+            else {
+                leftJoinColumns.style.display = "none";
+                rightJoinColumns.style.display = "none";
+            }
+        }
