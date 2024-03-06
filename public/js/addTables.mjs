@@ -63,13 +63,11 @@ document.addEventListener("DOMContentLoaded", function () {
         let columnfieldId = document.getElementById($(this).attr("dependent"));
         let numericPart = columnfield.match(/\d+$/);
         columnfieldId.name = `tables[${numericPart}][${this.value}][]`;
-        // console.log(numericPart);
         tableNames = [];
         allDynamic.forEach(function (selectElement) {
             tableNames.push(selectElement.value);
         });
-        // console.log(this);
-        matchingTableRetriever();
+        matchingTableRetriever(numericPart);
     }
 
     function createJoinDiv() {
@@ -125,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
         newSelect.id = "leftTableColumn0";
         newSelect.className = "joinTables";
         newSelect.setAttribute("data-dependent", "leftTable0");
-        createDefaultOption(newSelect, "Select Column");
+        createDefaultOption(newSelect, "Select Join Column");
         newSelect.style.display = "none";
 
         joinOnDiv.appendChild(tablesJoinSelect);
@@ -138,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
         newSelect.name = `joins[${numberOfTables - 1}][right_column]`;
         newSelect.id = "rightTableColumn0";
         newSelect.className = "joinTables";
-        createDefaultOption(newSelect, "Select Column");
+        createDefaultOption(newSelect, "Select Join Column");
         newSelect.style.display = "none";
         joinOnDiv.appendChild(rightTable);
         joinOnDiv.appendChild(newSelect);
@@ -157,20 +155,44 @@ document.addEventListener("DOMContentLoaded", function () {
         // handleJoinChange();
     }
 
-    function matchingTableRetriever() {
-        // console.log(this);
-        let jointablenames = document.querySelectorAll(".jointablenames");
-        jointablenames.forEach(function (tableName) {
-            let numericPart = tableName.id.match(/\d+$/);
-            console.log(tableName);
-            tableName.innerHTML = `<option value="" disabled selected>Select Join Table</option>`;
-            for (let i = 0; i <= numericPart; i++) {
+    function matchingTableRetriever(index) {
+        if (index == 0) {
+            index = 1;
+        }
+        for (let j = index; j <= numberOfTables; j++) {
+            let left = document.getElementById(`leftTable${j}`);
+            let right = document.getElementById(`rightTable${j}`);
+            let leftColumn = document.getElementById(`leftTableColumn${j}`);
+            let rightColumn = document.getElementById(`rightTableColumn${j}`);
+            left.innerHTML = `<option value="" disabled selected>Select Join Table</option>`;
+            right.innerHTML = `<option value="" disabled selected>Select Join Table</option>`;
+            leftColumn.innerHTML = `<option value="" disabled selected>Select Join Column</option>`;
+            rightColumn.innerHTML = `<option value="" disabled selected>Select Join Column</option>`;
+            for (let i = 0; i <= j; i++) {
                 let newOption = document.createElement("option");
                 newOption.value = tableNames[i];
                 newOption.text = tableNames[i];
-                tableName.appendChild(newOption);
+                left.appendChild(newOption);
             }
-        });
+            for (let i = 0; i <= j; i++) {
+                let newOption = document.createElement("option");
+                newOption.value = tableNames[i];
+                newOption.text = tableNames[i];
+                right.appendChild(newOption);
+            }
+        }
+        // let jointablenames = document.querySelectorAll(".jointablenames");
+        // jointablenames.forEach(function (tableName) {
+        //     console.log(tableName.id);
+        //     let numericPart = tableName.id.match(/\d+$/);
+        //     tableName.innerHTML = `<option value="" disabled selected>Select Join Table</option>`;
+        //     for (let i = 0; i <= numericPart; i++) {
+        //         let newOption = document.createElement("option");
+        //         newOption.value = tableNames[i];
+        //         newOption.text = tableNames[i];
+        //         tableName.appendChild(newOption);
+        //     }
+        // });
     }
 
     function createDefaultOption(parentElementId, texts) {
