@@ -37,8 +37,8 @@ document.addEventListener("DOMContentLoaded", function () {
         tableColumns.innerHTML = "<option>Select Columns</option>";
         createJoinDiv();
         // joins = document.querySelectorAll(".joins");
-        // let join = document.getElementById(`tablesJoin${numberOfTables}`);
-        attachEventListeners(table);
+        let join = document.getElementById(`tablesJoin${numberOfTables}`);
+        attachEventListeners(table, join);
     });
 
     function updateElementIds(element, numberOfTables, attributeName) {
@@ -50,18 +50,18 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    function attachEventListeners(table) {
+    function attachEventListeners(table, join) {
         $(table).change(columnNameRetriever);
         $(table).change(tableNameRetriever);
         // $(table).change(getTableNames);
         // $(tableColumns).change(handleTableColumnChange);
-        // $(join).change(handleJoinChange);
+        $(join).change(handleJoinChange);
     }
 
     function tableNameRetriever() {
         let columnfield = $(this).attr("dependent");
         let columnfieldId = document.getElementById($(this).attr("dependent"));
-        var numericPart = columnfield.match(/\d+$/);
+        let numericPart = columnfield.match(/\d+$/);
         columnfieldId.name = `tables[${numericPart}][${this.value}][]`;
         // console.log(numericPart);
         tableNames = [];
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
         leftTable.setAttribute("dependent", "joinOnDiv0");
         leftTable.setAttribute("data-dependent", "leftTableColumn0");
         createDefaultOption(leftTable, "Select Join Table");
-        // leftTable.style.display = "none";
+        leftTable.style.display = "none";
         // matchingTableRetriever();
 
         let rightTable = document.createElement("select");
@@ -115,7 +115,7 @@ document.addEventListener("DOMContentLoaded", function () {
         rightTable.setAttribute("dependent", "joinOnDiv0");
         rightTable.setAttribute("data-dependent", "rightTableColumn0");
         createDefaultOption(rightTable, "Select Join Table");
-        // rightTable.style.display = "none";
+        rightTable.style.display = "none";
 
         //
         //
@@ -126,13 +126,14 @@ document.addEventListener("DOMContentLoaded", function () {
         newSelect.className = "joinTables";
         newSelect.setAttribute("data-dependent", "leftTable0");
         createDefaultOption(newSelect, "Select Column");
+        newSelect.style.display = "none";
 
         joinOnDiv.appendChild(tablesJoinSelect);
         joinOnDiv.appendChild(document.createElement("br"));
         joinOnDiv.appendChild(document.createElement("br"));
         joinOnDiv.appendChild(leftTable);
-        joinOnDiv.appendChild(document.createElement("br"));
-        joinOnDiv.appendChild(document.createElement("br"));
+        // joinOnDiv.appendChild(document.createElement("br"));
+        // joinOnDiv.appendChild(document.createElement("br"));
         joinOnDiv.appendChild(newSelect);
 
         newSelect = document.createElement("select");
@@ -140,15 +141,16 @@ document.addEventListener("DOMContentLoaded", function () {
         newSelect.id = "rightTableColumn0";
         newSelect.className = "joinTables";
         createDefaultOption(newSelect, "Select Column");
+        newSelect.style.display = "none";
 
-        joinOnDiv.appendChild(document.createElement("br"));
-        joinOnDiv.appendChild(document.createElement("br"));
+        // joinOnDiv.appendChild(document.createElement("br"));
+        // joinOnDiv.appendChild(document.createElement("br"));
         joinOnDiv.appendChild(rightTable);
-        joinOnDiv.appendChild(document.createElement("br"));
-        joinOnDiv.appendChild(document.createElement("br"));
+        // joinOnDiv.appendChild(document.createElement("br"));
+        // joinOnDiv.appendChild(document.createElement("br"));
         joinOnDiv.appendChild(newSelect);
-        joinOnDiv.appendChild(document.createElement("br"));
-        joinOnDiv.appendChild(document.createElement("br"));
+        // joinOnDiv.appendChild(document.createElement("br"));
+        // joinOnDiv.appendChild(document.createElement("br"));
 
         // document.body.appendChild(joinOnDiv);
         updateElementIds(joinOnDiv, numberOfTables, "id");
@@ -190,12 +192,34 @@ document.addEventListener("DOMContentLoaded", function () {
         parentElementId.appendChild(defalutOption);
     }
 
-    // function handleJoinChange() {
-    //     // matchingTableRetriever();
-    //     console.log(this);
-    //     console.log(this.dependent1);
-    //     // this.style.display = "none";
-    // }
+    function handleJoinChange() {
+        let numericPart = this.id.match(/\d+$/);
+        let leftTable = document.getElementById(`leftTable${numericPart}`);
+        let rightTable = document.getElementById(`rightTable${numericPart}`);
+        let leftTableColumn = document.getElementById(
+            `leftTableColumn${numericPart}`
+        );
+        let rightTableColumn = document.getElementById(
+            `rightTableColumn${numericPart}`
+        );
+        if (this.value === "cross") {
+            leftTable.style.display = "none";
+            rightTable.style.display = "none";
+            leftTableColumn.style.display = "none";
+            rightTableColumn.style.display = "none";
+        } else {
+            leftTable.style.display = "block";
+            rightTable.style.display = "block";
+            leftTableColumn.style.display = "block";
+            rightTableColumn.style.display = "block";
+            leftTable.style.marginBottom = "20px";
+            rightTable.style.marginBottom = "20px";
+            leftTableColumn.style.marginBottom = "20px";
+            rightTableColumn.style.marginBottom = "20px";
+        }
+        // console.log(this.dependent1);
+        // this.style.display = "none";
+    }
 
     $(allDynamic).change(columnNameRetriever);
     // // $(allDynamic).change(getTableNames);
