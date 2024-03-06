@@ -132,8 +132,6 @@ document.addEventListener("DOMContentLoaded", function () {
         joinOnDiv.appendChild(document.createElement("br"));
         joinOnDiv.appendChild(document.createElement("br"));
         joinOnDiv.appendChild(leftTable);
-        // joinOnDiv.appendChild(document.createElement("br"));
-        // joinOnDiv.appendChild(document.createElement("br"));
         joinOnDiv.appendChild(newSelect);
 
         newSelect = document.createElement("select");
@@ -142,19 +140,10 @@ document.addEventListener("DOMContentLoaded", function () {
         newSelect.className = "joinTables";
         createDefaultOption(newSelect, "Select Column");
         newSelect.style.display = "none";
-
-        // joinOnDiv.appendChild(document.createElement("br"));
-        // joinOnDiv.appendChild(document.createElement("br"));
         joinOnDiv.appendChild(rightTable);
-        // joinOnDiv.appendChild(document.createElement("br"));
-        // joinOnDiv.appendChild(document.createElement("br"));
         joinOnDiv.appendChild(newSelect);
-        // joinOnDiv.appendChild(document.createElement("br"));
-        // joinOnDiv.appendChild(document.createElement("br"));
 
-        // document.body.appendChild(joinOnDiv);
         updateElementIds(joinOnDiv, numberOfTables, "id");
-        // updateElementIds(joinOnDiv, numberOfTables, "name");
         updateElementIds(joinOnDiv, numberOfTables, "dependent");
         updateElementIds(joinOnDiv, numberOfTables, "dependent1");
         updateElementIds(joinOnDiv, numberOfTables, "dependent2");
