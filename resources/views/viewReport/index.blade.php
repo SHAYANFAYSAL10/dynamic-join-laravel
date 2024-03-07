@@ -6,12 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Document</title>
-    {{-- <script type="module" src="{{ asset('js/columnNameFetcher.mjs') }}" defer></script>
-    <script type="module" src="{{ asset('js/tableDataViewer.mjs') }}" defer></script>
-    <script type="module" src="{{ asset('js/tableDataFetcher.mjs') }}" defer></script>
-    <script type="module" src="{{ asset('js/joinedDataFetcher.mjs') }}" defer></script>
-    <script type="module" src="{{ asset('js/addTables.mjs') }}" defer></script> --}}
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    @vite('resources/css/app.css')
     @routes
 </head>
 

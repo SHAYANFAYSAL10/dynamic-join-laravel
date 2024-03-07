@@ -15,4 +15,10 @@ class ViewReportListController extends Controller
         // dd($reports);
         return view('reportList.index', ['reports' => $reports]);
     }
+
+    public function show($id)
+    {
+        $reports = Report::find($id);
+        return view('reportList.show', ['reports' => $reports]);
+    }
 }

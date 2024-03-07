@@ -46,6 +46,6 @@ Route::post('/join/fetch_datas', [JoinController::class, 'fetch_datas'])->name('
 Route::post('/join/fetch_join_datas', [JoinController::class, 'fetch_join_datas'])->name('adminViewCreate.fetch_join_datas');
 Route::post('/join', [JoinController::class, 'processForm'])->name('adminViewCreate.processForm');
 
-Route::get('/view-report', [ReportController::class, 'index']);
+Route::Resource('/view-report', ReportController::class);
 
 Route::get('/view-report-list', [ViewReportListController::class, 'index']);

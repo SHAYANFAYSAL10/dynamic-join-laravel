@@ -12,12 +12,11 @@
     <script type="module" src="{{ asset('js/joinedDataFetcher.mjs') }}" defer></script>
     <script type="module" src="{{ asset('js/addTables.mjs') }}" defer></script> --}}
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    @vite('resources/css/app.css')
     @routes
 </head>
 
 <body>
-    <h1>View Reports</h1>
+    <h1>View Data</h1>
     <table border="1">
         <thead>
             <tr>
@@ -33,14 +32,10 @@
                     @foreach ($report as $value)
                         <td>{{ $value }}</td>
                     @endforeach
-                    <td><a href="{{ url('/view-report/' . $report->id) }}"
+                    <td><a href="{{ url('/view-report-list/' . $report) }}"
                             title="View Report Data"><button>View</button></a>
                         <button>Edit</button>
-                        <form method="POST" action="{{ url('view-report/' . $report->id) }}">
-                            {{ method_field('DELETE') }}
-                            {{ csrf_field() }}
-                            <button type="submit" onclick="return confirm("Confirm delete?")">Delete</button>
-                        </form>
+                        <button>Delete</button>
                     </td>
                 </tr>
             @endforeach
