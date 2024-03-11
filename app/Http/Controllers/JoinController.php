@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Report;
+use App\Models\User;
 use DB;
 
 class JoinController extends Controller
@@ -12,7 +13,8 @@ class JoinController extends Controller
     {
         $tableNames = DB::select('SHOW TABLES');
         $tableNames = array_map('current', $tableNames);
-        return view('adminViewCreate.index', ['tableNames' => $tableNames]);
+        $userNames = User::pluck('name')->all();
+        return view('adminViewCreate.index', ['tableNames' => $tableNames, 'users' => $userNames]);
     }
 
     public function fetch(Request $request)
@@ -84,13 +86,16 @@ class JoinController extends Controller
 
     public function processForm(Request $request)
     {
-        $data = $request->except(['_token', 'table']);
+        //TODO: add validation for non selected column
+        $users = $request['users'];
+        $name = $request['name'];
+        $data = $request->except(['_token', 'table', 'users', 'name']);
         if (!isset($data['joins'])) {
             $data['joins'] = [];
         }
         // dd($data);
 
-        Report::create(['view' => $data]);
+        Report::create(['view' => $data, 'name' => $name, 'users' => $users]);
         echo "<pre>";
 
         return redirect()->route('adminViewCreate.index');

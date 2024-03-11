@@ -9,10 +9,10 @@ class Report extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['view'];
+    protected $fillable = ['name', 'view', 'users'];
 
     protected $casts = [
         'view' => 'array',
-        // 'data' => 'json',
+        'users' => 'array',
     ];
 }

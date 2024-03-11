@@ -1,9 +1,12 @@
 import { columnNameRetriever } from "./columnNameFetcher.mjs";
+// export { cloneTable };
 // import {
 //     getTableNames,
 //     handleTableColumnChange,
 //     joinChange,
 // } from "./joinedDataFetcher.mjs";
+
+let cloneTable;
 
 document.addEventListener("DOMContentLoaded", function () {
     let tableNames = [];
@@ -19,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let dynamicDiv = document.getElementById("dynamicDiv0");
     let tablesDiv = document.getElementById("tablesDiv");
 
-    addButton.addEventListener("click", function () {
+    cloneTable = function () {
         numberOfTables++;
         let newDiv = dynamicDiv.cloneNode(true);
         // let newDivId = "dynamicDiv" + numberOfTables;
@@ -39,7 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // joins = document.querySelectorAll(".joins");
         let join = document.getElementById(`tablesJoin${numberOfTables}`);
         attachEventListeners(table, join);
-    });
+    };
 
     function updateElementIds(element, numberOfTables, attributeName) {
         let elements = element.querySelectorAll(`[${attributeName}]`);
@@ -77,10 +80,11 @@ document.addEventListener("DOMContentLoaded", function () {
         let tablesJoinSelect = document.createElement("select");
         tablesJoinSelect.id = "tablesJoin0";
         tablesJoinSelect.name = `joins[${numberOfTables - 1}][join_type]`;
-        tablesJoinSelect.className = "dynamicdatas joins";
+        tablesJoinSelect.className = "form-select mt-4 dynamicdatas joins";
         tablesJoinSelect.setAttribute("dependent1", "leftTable0");
         tablesJoinSelect.setAttribute("dependent2", "rightTable0");
         createDefaultOption(tablesJoinSelect, "Select Join Type");
+        tablesJoinSelect.style.marginBottom = "20px";
 
         let joinOptions = [
             { value: "inner", text: "Inner Join" },
@@ -96,50 +100,64 @@ document.addEventListener("DOMContentLoaded", function () {
             tablesJoinSelect.appendChild(optionElement);
         });
 
+        let joinTableDiv = document.createElement("div");
+        let leftTableDiv = document.createElement("div");
+        let rightTableDiv = document.createElement("div");
+        joinTableDiv.className = "d-flex flex-row";
+        leftTableDiv.className = "flex-grow-1";
+        rightTableDiv.className = "flex-grow-1";
+
         let leftTable = document.createElement("select");
         leftTable.id = "leftTable0";
         leftTable.name = `joins[${numberOfTables - 1}][left_table]`;
-        leftTable.className = "dynamicdatas jointablenames";
+        leftTable.className =
+            "form-select dynamicdatas jointablenames leftTablesJoin";
         leftTable.setAttribute("dependent", "joinOnDiv0");
         leftTable.setAttribute("data-dependent", "leftTableColumn0");
         createDefaultOption(leftTable, "Select Join Table");
         leftTable.style.display = "none";
-        // matchingTableRetriever();
+        let newSelect = document.createElement("select");
+        newSelect.name = `joins[${numberOfTables - 1}][left_column]`;
+        newSelect.id = "leftTableColumn0";
+        newSelect.className = "form-select joinTables leftTablesColumns";
+        newSelect.setAttribute("data-dependent", "leftTable0");
+        createDefaultOption(newSelect, "Select Join Column");
+        newSelect.style.display = "none";
+        leftTableDiv.appendChild(leftTable);
+        leftTableDiv.appendChild(newSelect);
+        joinTableDiv.appendChild(leftTableDiv);
 
         let rightTable = document.createElement("select");
         rightTable.id = "rightTable0";
         rightTable.name = `joins[${numberOfTables - 1}][right_table]`;
-        rightTable.className = "dynamicdatas jointablenames";
+        rightTable.className =
+            "form-select dynamicdatas jointablenames rightTablesJoin";
         rightTable.setAttribute("dependent", "joinOnDiv0");
         rightTable.setAttribute("data-dependent", "rightTableColumn0");
         createDefaultOption(rightTable, "Select Join Table");
         rightTable.style.display = "none";
-
-        //
-        //
-
-        let newSelect = document.createElement("select");
-        newSelect.name = `joins[${numberOfTables - 1}][left_column]`;
-        newSelect.id = "leftTableColumn0";
-        newSelect.className = "joinTables";
-        newSelect.setAttribute("data-dependent", "leftTable0");
-        createDefaultOption(newSelect, "Select Join Column");
-        newSelect.style.display = "none";
-
-        joinOnDiv.appendChild(tablesJoinSelect);
-        joinOnDiv.appendChild(document.createElement("br"));
-        joinOnDiv.appendChild(document.createElement("br"));
-        joinOnDiv.appendChild(leftTable);
-        joinOnDiv.appendChild(newSelect);
-
         newSelect = document.createElement("select");
         newSelect.name = `joins[${numberOfTables - 1}][right_column]`;
         newSelect.id = "rightTableColumn0";
-        newSelect.className = "joinTables";
+        newSelect.className = "form-select joinTables rightTablesColumns";
         createDefaultOption(newSelect, "Select Join Column");
         newSelect.style.display = "none";
-        joinOnDiv.appendChild(rightTable);
-        joinOnDiv.appendChild(newSelect);
+        rightTableDiv.appendChild(rightTable);
+        rightTableDiv.appendChild(newSelect);
+        joinTableDiv.appendChild(rightTableDiv);
+
+        //
+        //
+
+        joinOnDiv.appendChild(tablesJoinSelect);
+        joinOnDiv.appendChild(joinTableDiv);
+        // joinOnDiv.appendChild(document.createElement("br"));
+        // joinOnDiv.appendChild(document.createElement("br"));
+        // joinOnDiv.appendChild(leftTable);
+        // joinOnDiv.appendChild(newSelect);
+
+        // joinOnDiv.appendChild(rightTable);
+        // joinOnDiv.appendChild(newSelect);
 
         updateElementIds(joinOnDiv, numberOfTables, "id");
         updateElementIds(joinOnDiv, numberOfTables, "dependent");
@@ -238,4 +256,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // // $(alltableColumnChanged).change(handleTableColumnChange);
     // // $(joins).change(joinChange);
     $(allDynamic).change(tableNameRetriever);
+    addButton.addEventListener("click", cloneTable);
 });
+export { cloneTable };

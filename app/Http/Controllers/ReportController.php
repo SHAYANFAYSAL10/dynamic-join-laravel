@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Report;
+use App\Models\User;
 use DB;
 
 class ReportController extends Controller
@@ -54,19 +55,34 @@ class ReportController extends Controller
         return $duplicateKeys;
     }
 
-    public function show($id)
+    public function showData($id)
     {
         $report = Report::find($id);
         $data = $report->view;
+        $name = $report->name;
         $duplicateKeys = $this->duplicateKeys($data);
         $result = $this->generateSqlQuery($data, $duplicateKeys);
         $result = DB::select($result);
-        return view('viewReport.index', ['data' => $result]);
+        return view('viewReport.index', ['data' => $result, 'name' => $name]);
     }
 
     public function destroy($id)
     {
         Report::destroy($id);
         return redirect('/view-report-list')->with('flash_message', 'Report deleted!');
+    }
+
+    public function edit($id)
+    {
+        $tableNames = DB::select('SHOW TABLES');
+        $tableNames = array_map('current', $tableNames);
+        $results = DB::table('reports')
+            ->where('id', $id)
+            ->value('view');
+        $results = json_decode($results, true);
+        $userNames = User::pluck('name')->all();
+        // dd($result->tables);
+        return view('adminViewCreate.edit', ['results' => $results, 'id' => $id, 'tableNames' => $tableNames, 'users' => $userNames]);
+        // dd(implode(', ', array_keys($result['tables'][0])));
     }
 }
