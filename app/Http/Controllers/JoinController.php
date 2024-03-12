@@ -88,6 +88,9 @@ class JoinController extends Controller
     {
         //TODO: add validation for non selected column
         $users = $request['users'];
+        if (empty($request['users'])) {
+            $users = [];
+        }
         $name = $request['name'];
         $data = $request->except(['_token', 'table', 'users', 'name']);
         if (!isset($data['joins'])) {
@@ -98,7 +101,7 @@ class JoinController extends Controller
         Report::create(['view' => $data, 'name' => $name, 'users' => $users]);
         echo "<pre>";
 
-        return redirect()->route('adminViewCreate.index');
+        return redirect('/view-report-list');
         // unset($request['_token']);
         // unset($request['table']);
         // print_r($request->all());

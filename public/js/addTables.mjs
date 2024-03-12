@@ -7,6 +7,10 @@ import { columnNameRetriever } from "./columnNameFetcher.mjs";
 // } from "./joinedDataFetcher.mjs";
 
 let cloneTable;
+let tableNameRetriever;
+let handleJoinChange;
+let incrementnumberOfTables;
+let numberOfTables = 0;
 
 document.addEventListener("DOMContentLoaded", function () {
     let tableNames = [];
@@ -16,11 +20,15 @@ document.addEventListener("DOMContentLoaded", function () {
         ".tableColumnChanged"
     );
     let joins = document.querySelectorAll(".joins");
-    let numberOfTables = 0;
 
     let addButton = document.getElementById("addTable");
     let dynamicDiv = document.getElementById("dynamicDiv0");
     let tablesDiv = document.getElementById("tablesDiv");
+
+    incrementnumberOfTables = function () {
+        numberOfTables++;
+        console.log(numberOfTables);
+    };
 
     cloneTable = function () {
         numberOfTables++;
@@ -61,7 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
         $(join).change(handleJoinChange);
     }
 
-    function tableNameRetriever() {
+    tableNameRetriever = function () {
         let columnfield = $(this).attr("dependent");
         let columnfieldId = document.getElementById($(this).attr("dependent"));
         let numericPart = columnfield.match(/\d+$/);
@@ -71,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function () {
             tableNames.push(selectElement.value);
         });
         matchingTableRetriever(numericPart);
-    }
+    };
 
     function createJoinDiv() {
         let joinOnDiv = document.createElement("div");
@@ -222,7 +230,7 @@ document.addEventListener("DOMContentLoaded", function () {
         parentElementId.appendChild(defalutOption);
     }
 
-    function handleJoinChange() {
+    handleJoinChange = function () {
         let numericPart = this.id.match(/\d+$/);
         let leftTable = document.getElementById(`leftTable${numericPart}`);
         let rightTable = document.getElementById(`rightTable${numericPart}`);
@@ -249,13 +257,22 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         // console.log(this.dependent1);
         // this.style.display = "none";
-    }
+    };
 
     $(allDynamic).change(columnNameRetriever);
     // // $(allDynamic).change(getTableNames);
     // // $(alltableColumnChanged).change(handleTableColumnChange);
     // // $(joins).change(joinChange);
     $(allDynamic).change(tableNameRetriever);
+    $(joins).change(handleJoinChange);
+    let allJoinTables = document.querySelectorAll(".jointablenames");
+    $(allJoinTables).change(columnNameRetriever);
+    // $(table).change(tableNameRetriever);
     addButton.addEventListener("click", cloneTable);
 });
-export { cloneTable };
+export {
+    cloneTable,
+    tableNameRetriever,
+    handleJoinChange,
+    incrementnumberOfTables,
+};

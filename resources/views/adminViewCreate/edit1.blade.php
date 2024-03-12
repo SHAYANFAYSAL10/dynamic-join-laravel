@@ -12,6 +12,7 @@
     <script type="module" src="{{ asset('js/tableDataFetcher.mjs') }}" defer></script>
     <script type="module" src="{{ asset('js/joinedDataFetcher.mjs') }}" defer></script>
     <script type="module" src="{{ asset('js/addTables.mjs') }}" defer></script>
+    <script type="module" src="{{ asset('js/editReport.mjs') }}" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
     @routes
@@ -50,14 +51,22 @@
             flex-direction: column;
             align-items: center;
         }
+
+        /* Style for Select2 */
+        .select2-container {
+            width: 100% !important;
+        }
     </style>
 </head>
 
 <body>
+    @php
+        $resultsData = json_encode($results);
+    @endphp
     <div class="container center-button">
         <div class="container-bg row">
             <h1 class="mb-4">Create Report</h1>
-            <form action="{{ url('/') }}/join" method="post">
+            <form action="{{ url('view-report/' . $id . '/edit') }}" method="post">
                 @csrf
                 <div>
                     <input type="text" name="name" class="form-control" id="reportName" placeholder="Report Name">
@@ -79,19 +88,23 @@
                                 <option disabled selected value="">Select Table</option>
                                 @foreach ($tableNames as $tableName)
                                     <option value="{{ $tableName }}">{{ $tableName }}</option>
+                                    {{-- <option value="{{ $tableName }}"
+                                        {{ $tableName === implode(', ', array_keys($results['tables'][0])) ? 'selected' : '' }}>
+                                        {{ $tableName }} --}}
+                                    </option>
                                 @endforeach
                             </select>
                             <label for="tableColumns0" class="form-label"></label>
                             <select name="tables" id="tableColumns0"
                                 class="form-select mt-0 dynamicdatas tableColumnChanged" data-dependent="tableDatas0"
                                 multiple>
-                                <option value="">Select Columns</option>
+                                {{-- <option value="">Select Columns</option> --}}
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="center-button">
-                    <button type="submit" class="btn btn-info text-white px-2">Submit</button>
+                    <button type="submit" class="btn btn-info text-white px-2">Update</button>
                 </div>
                 {{ csrf_field() }}
             </form>
@@ -100,6 +113,9 @@
             </div>
         </div>
     </div>
+    <script type="module">
+        window.reportsData = {!! $resultsData !!};
+    </script>
 </body>
 
 </html>

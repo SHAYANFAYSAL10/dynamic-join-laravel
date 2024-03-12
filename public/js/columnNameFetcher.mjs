@@ -1,3 +1,5 @@
+let editSelect;
+
 export function columnNameRetriever() {
     // console.log("first");
     if ($(this).val() != "") {
@@ -5,7 +7,7 @@ export function columnNameRetriever() {
         // console.log(currentId);
         var value = $(this).val();
         // console.log(value);
-        var dependent = $(this).data("dependent");
+        var dependent = $(this).attr("data-dependent");
         // console.log(dependent);
         var _token = $('input[name="_token"').val();
         $.ajax({
@@ -31,11 +33,17 @@ export function columnNameRetriever() {
     }
 }
 
-export function setUpColumnOptions(columnName, response, isCheck) {
+function setUpColumnOptions(columnName, response, isCheck) {
     response.data.forEach(function (entry, index) {
         var numberOfFeatures = Object.keys(entry).length;
         var columnOption = document.createElement("option");
         columnOption.textContent = entry;
+        columnOption.value = entry;
         columnName.appendChild(columnOption);
     });
+    editSelect = function () {
+        console.log("Hello");
+    };
 }
+
+export { editSelect };
