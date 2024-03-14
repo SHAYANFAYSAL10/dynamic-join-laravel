@@ -1,5 +1,3 @@
-let editSelect;
-
 export function columnNameRetriever() {
     // console.log("first");
     if ($(this).val() != "") {
@@ -41,9 +39,4 @@ function setUpColumnOptions(columnName, response, isCheck) {
         columnOption.value = entry;
         columnName.appendChild(columnOption);
     });
-    editSelect = function () {
-        console.log("Hello");
-    };
 }
-
-export { editSelect };

@@ -40,11 +40,11 @@ Route::get('/automatic', [Automatic::class, 'index'])->name('automatic.index');
 Route::post('/automatic/fetch', [Automatic::class, 'fetch'])->name('automatic.fetch');
 Route::post('/automatic/fetch_datas', [Automatic::class, 'fetch_datas'])->name('automatic.fetch_datas');
 
-Route::get('/join', [JoinController::class, 'index'])->name('adminViewCreate.index');
-Route::post('/join/fetch', [JoinController::class, 'fetch'])->name('adminViewCreate.fetch');
-Route::post('/join/fetch_datas', [JoinController::class, 'fetch_datas'])->name('adminViewCreate.fetch_datas');
-Route::post('/join/fetch_join_datas', [JoinController::class, 'fetch_join_datas'])->name('adminViewCreate.fetch_join_datas');
-Route::post('/join', [JoinController::class, 'processForm'])->name('adminViewCreate.processForm');
+Route::get('/create', [JoinController::class, 'index'])->name('adminViewCreate.index');
+Route::post('/create/fetch', [JoinController::class, 'fetch'])->name('adminViewCreate.fetch');
+Route::post('/create/fetch_datas', [JoinController::class, 'fetch_datas'])->name('adminViewCreate.fetch_datas');
+Route::post('/create/fetch_join_datas', [JoinController::class, 'fetch_join_datas'])->name('adminViewCreate.fetch_join_datas');
+Route::post('/create', [JoinController::class, 'processForm'])->name('adminViewCreate.processForm');
 
 // Route::Resource('/view-report', ReportController::class);
 Route::get('/view-report/{id}', [ReportController::class, 'showData'])->name('viewReport.index');

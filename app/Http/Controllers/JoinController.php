@@ -86,7 +86,6 @@ class JoinController extends Controller
 
     public function processForm(Request $request)
     {
-        //TODO: add validation for non selected column
         $users = $request['users'];
         if (empty($request['users'])) {
             $users = [];
@@ -102,8 +101,5 @@ class JoinController extends Controller
         echo "<pre>";
 
         return redirect('/view-report-list');
-        // unset($request['_token']);
-        // unset($request['table']);
-        // print_r($request->all());
     }
 }

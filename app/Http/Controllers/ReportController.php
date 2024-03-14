@@ -100,7 +100,6 @@ class ReportController extends Controller
 
     public function editForm(Request $request, $id)
     {
-        //TODO: add validation for non selected column
         $users = $request['users'];
         if (empty($request['users'])) {
             $users = [];

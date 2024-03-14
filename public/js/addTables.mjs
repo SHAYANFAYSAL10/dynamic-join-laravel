@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
         tablesDiv.appendChild(newDiv);
         allDynamic = document.querySelectorAll(".dynamic");
         let table = document.getElementById(`table${numberOfTables}`);
+        table.selectedIndex = 0;
         let tableColumns = document.getElementById(
             `tableColumns${numberOfTables}`
         );
@@ -91,6 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
         tablesJoinSelect.className = "form-select mt-4 dynamicdatas joins";
         tablesJoinSelect.setAttribute("dependent1", "leftTable0");
         tablesJoinSelect.setAttribute("dependent2", "rightTable0");
+        tablesJoinSelect.setAttribute("required", true);
         createDefaultOption(tablesJoinSelect, "Select Join Type");
         tablesJoinSelect.style.marginBottom = "20px";
 
@@ -241,11 +243,21 @@ document.addEventListener("DOMContentLoaded", function () {
             `rightTableColumn${numericPart}`
         );
         if (this.value === "cross") {
+            leftTable.required = false;
+            rightTable.required = false;
+            leftTableColumn.required = false;
+            leftTableColumn.required = false;
+
             leftTable.style.display = "none";
             rightTable.style.display = "none";
             leftTableColumn.style.display = "none";
             rightTableColumn.style.display = "none";
         } else {
+            leftTable.required = true;
+            rightTable.required = true;
+            leftTableColumn.required = true;
+            leftTableColumn.required = true;
+
             leftTable.style.display = "block";
             rightTable.style.display = "block";
             leftTableColumn.style.display = "block";
@@ -268,6 +280,9 @@ document.addEventListener("DOMContentLoaded", function () {
     let allJoinTables = document.querySelectorAll(".jointablenames");
     $(allJoinTables).change(columnNameRetriever);
     // $(table).change(tableNameRetriever);
+    $("#addTableDiv").on("click", function (event) {
+        event.preventDefault();
+    });
     addButton.addEventListener("click", cloneTable);
 });
 export {

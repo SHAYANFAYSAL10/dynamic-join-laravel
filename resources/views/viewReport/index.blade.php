@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Colorful Report</title>
+    <title>Report Data</title>
 
-    <!-- Bootstrap CSS -->
+    {{-- <!-- Bootstrap CSS -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
     <!-- Add this script tag to include json-formatter-js directly in your HTML -->
@@ -16,7 +16,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/components/prism-json.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/themes/prism.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.27.0/prism.min.js"></script> --}}
+    <link rel="stylesheet" href="{{ asset('modules/prism.min.css') }}">
+    <script src="{{ asset('modules/jquery.min.js') }}"></script>
+    <script src="{{ asset('modules/jquery.slim.min.js') }}"></script>
+    <script src="{{ asset('modules/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('modules/bootstrap2.min.js') }}"></script>
+    <script src="{{ asset('modules/alpine.min.js') }}" defer></script>
+    <script src="{{ asset('modules/popper.min.js') }}"></script>
+    <script src="{{ asset('modules/prism-json.min.js') }}"></script>
+    <script src="{{ asset('modules/prism.js') }}"></script>
+    <script src="{{ asset('modules/prism.min.js') }}"></script>
+    <script src="{{ asset('modules/cdn.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('modules/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('modules/bootstrap2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('modules/bootstrap3.min.css') }}">
 
     <!-- Custom CSS -->
     <style>
@@ -32,7 +46,7 @@
     </style>
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
 
     <!-- Vite and Routes (Assuming these are related to your specific framework) -->
     @vite('resources/css/app.css')

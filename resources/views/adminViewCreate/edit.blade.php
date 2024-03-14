@@ -4,17 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dynamic Join</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" />
+    <title>Update Report</title>
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
     <script type="module" src="{{ asset('js/columnNameFetcher.mjs') }}" defer></script>
     <script type="module" src="{{ asset('js/tableDataViewer.mjs') }}" defer></script>
     <script type="module" src="{{ asset('js/tableDataFetcher.mjs') }}" defer></script>
     {{-- <script type="module" src="{{ asset('js/joinedDataFetcher.mjs') }}" defer></script> --}}
     <script type="module" src="{{ asset('js/addTables.mjs') }}" defer></script>
     {{-- <script type="module" src="{{ asset('js/editReport.mjs') }}" defer></script> --}}
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+    {{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('modules/prism.min.css') }}"> --}}
+    <script src="{{ asset('modules/jquery.min.js') }}"></script>
+    {{-- <script src="{{ asset('modules/jquery.slim.min.js') }}"></script> --}}
+    <script src="{{ asset('modules/bootstrap.min.js') }}"></script>
+    <script src="{{ asset('modules/bootstrap2.min.js') }}"></script>
+    {{-- <script src="{{ asset('modules/alpine.min.js') }}" defer></script> --}}
+    {{-- <script src="{{ asset('modules/popper.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('modules/prism-json.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('modules/prism.js') }}"></script> --}}
+    {{-- <script src="{{ asset('modules/prism.min.js') }}"></script> --}}
+    {{-- <script src="{{ asset('modules/cdn.min.js') }}"></script> --}}
+    <link rel="stylesheet" href="{{ asset('modules/bootstrap.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('modules/bootstrap2.min.css') }}"> --}}
+    {{-- <link rel="stylesheet" href="{{ asset('modules/bootstrap3.min.css') }}"> --}}
     @routes
     <style>
         body {
@@ -39,7 +53,7 @@
         }
 
         #addTableDiv {
-            text-align: center;
+            text-align: right;
         }
 
         #addTable {
@@ -62,34 +76,36 @@
 <body>
     <div class="container center-button">
         <div class="container-bg row">
-            <h1 class="mb-4">Create Report</h1>
+            <h1 class="mb-4">Update Report</h1>
             <form action="{{ url('view-report/' . $id . '/edit') }}" method="post">
                 @csrf
-                {{-- @method('PUT') --}}
-                <div>
-                    <input type="text" name="name" class="form-control" id="reportName"
-                        value="{{ $name }}"></input>
-                </div>
-                <div>
-                    <select name="users[]" id="users" class="form-select mt-4" multiple>
-                        <option disabled value="">Select Users</option>
-                        @foreach ($users as $user)
-                            <option value="{{ $user }}" {{ in_array($user, $selectedUsers) ? 'selected' : '' }}>
-                                {{ $user }}
-                            </option>
-                        @endforeach
-                    </select>
-
+                <div class="border border-white border-3 rounded px-3 mb-4">
+                    <div>
+                        <input type="text" name="name" class="form-control mt-4" id="reportName"
+                            value="{{ $name }}" required></input>
+                    </div>
+                    <div>
+                        <select name="users[]" id="users" class="form-select mt-4 mb-4" multiple>
+                            <option disabled value="">Select Users</option>
+                            @foreach ($users as $user)
+                                <option value="{{ $user }}"
+                                    {{ in_array($user, $selectedUsers) ? 'selected' : '' }}>
+                                    {{ $user }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
                 <div id="tablesDiv" class="mb-4">
                     @foreach ($view->tables as $index => $tables)
                         @foreach ($tables as $table => $columns)
-                            <div id="dynamicDiv{{ $index }}" class="tables">
+                            <div id="dynamicDiv{{ $index }}"
+                                class="tables border border-white border-3 mb-4 rounded px-3">
                                 <div class="g-3">
                                     <label for="table{{ $index }}" class="form-label"></label>
                                     <select name="table[]" id="table{{ $index }}" class="form-select dynamic"
                                         data-dependent="tableColumns{{ $index }}"
-                                        dependent="tableColumns{{ $index }}">
+                                        dependent="tableColumns{{ $index }}" required>
                                         <option disabled selected value="">Select Table</option>
                                         @foreach ($tableNames as $tableName)
                                             <option value="{{ $tableName }}"
@@ -103,8 +119,8 @@
                                     <label for="tableColumns{{ $index }}" class="form-label"></label>
                                     <select name="tables[{{ $index }}][{{ $table }}][]"
                                         id="tableColumns{{ $index }}"
-                                        class="form-select mt-0 dynamicdatas tableColumnChanged"
-                                        data-dependent="tableDatas{{ $index }}" multiple>
+                                        class="form-select mt-0 mb-4 dynamicdatas tableColumnChanged"
+                                        data-dependent="tableDatas{{ $index }}" required multiple>
                                         @foreach ($selectedTables[$table] as $column)
                                             <option value="{{ $column }}"
                                                 {{ in_array($column, $columns) ? 'selected' : '' }}>
@@ -125,11 +141,12 @@
                                     incrementnumberOfTables();
                                 });
                             </script>
-                            <div id="joinOnDiv{{ $index }}"><select id="tablesJoin{{ $index }}"
+                            <div id="joinOnDiv{{ $index }}">
+                                <select id="tablesJoin{{ $index }}"
                                     name="joins[{{ $index - 1 }}][join_type]"
                                     class="form-select mt-4 dynamicdatas joins"
                                     dependent1="leftTable{{ $index }}"
-                                    dependent2="rightTable{{ $index }}" style="margin-bottom: 20px;">
+                                    dependent2="rightTable{{ $index }}" style="margin-bottom: 20px;" required>
                                     <option value="" disabled="">Select Join Type</option>
                                     <option value="inner"
                                         {{ $view->joins[$index - 1]->join_type === 'inner' ? 'selected' : '' }}>Inner
@@ -151,7 +168,8 @@
                                             class="form-select dynamicdatas jointablenames leftTablesJoin"
                                             dependent="joinOnDiv{{ $index }}"
                                             data-dependent="leftTableColumn{{ $index }}"
-                                            style="{{ $view->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}">
+                                            style="{{ $view->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
+                                            {{ $view->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
                                             <option value="" disabled="">Select Join Table</option>
                                             @if ($view->joins[$index - 1]->join_type !== 'cross')
                                                 @php
@@ -181,7 +199,8 @@
                                             id="leftTableColumn{{ $index }}"
                                             class="form-select joinTables leftTablesColumns"
                                             data-dependent="leftTable{{ $index }}"
-                                            style="{{ $view->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}">
+                                            style="{{ $view->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
+                                            {{ $view->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
                                             <option value="" disabled="">Select Join Column</option>
                                             @if ($view->joins[$index - 1]->join_type !== 'cross')
                                                 @foreach ($selectedTables[$view->joins[$index - 1]->left_table] as $column)
@@ -199,7 +218,8 @@
                                             class="form-select dynamicdatas jointablenames rightTablesJoin"
                                             dependent="joinOnDiv{{ $index }}"
                                             data-dependent="rightTableColumn{{ $index }}"
-                                            style="{{ $view->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}">
+                                            style="{{ $view->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
+                                            {{ $view->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
                                             <option value="" disabled="">Select Join Table</option>
                                             @if ($view->joins[$index - 1]->join_type !== 'cross')
                                                 @php
@@ -225,7 +245,8 @@
                                         <select name="joins[{{ $index - 1 }}][right_column]"
                                             id="rightTableColumn{{ $index }}"
                                             class="form-select joinTables rightTablesColumns"
-                                            style="{{ $view->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}">
+                                            style="{{ $view->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
+                                            {{ $view->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
                                             <option value="" disabled="">Select Join Column</option>
                                             @if ($view->joins[$index - 1]->join_type !== 'cross')
                                                 @foreach ($selectedTables[$view->joins[$index - 1]->right_table] as $column)
@@ -242,14 +263,14 @@
                         @endif
                     @endforeach
                 </div>
-                <div class="center-button">
+                <div id="addTableDiv" class="mt-3" type="button">
+                    <button id="addTable" class="btn btn-secondary px-2 py-0"> + </button>
+                </div>
+                <div class="center-button mt-4">
                     <button type="submit" class="btn btn-info text-white px-2">Update</button>
                 </div>
                 {{ csrf_field() }}
             </form>
-            <div id="addTableDiv" class="mt-3">
-                <button id="addTable" class="btn btn-secondary px-4 py-0"> + </button>
-            </div>
         </div>
     </div>
 </body>

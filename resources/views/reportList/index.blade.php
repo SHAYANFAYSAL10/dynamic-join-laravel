@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Document</title>
+    <title>Report List</title>
     <link rel="stylesheet" href="{{ asset('modules/prism.min.css') }}">
     <script src="{{ asset('modules/jquery.min.js') }}"></script>
     <script src="{{ asset('modules/jquery.slim.min.js') }}"></script>
@@ -38,7 +38,7 @@
     <div class="container mt-5">
         <div class="flex justify-between items-center bg-gray-200 p-5 rounded-md">
             <h1>View Reports</h1>
-            <div class="text-right"><a href="{{ url('join') }}" class="btn btn-primary mb-3">Add New</a></div>
+            <div class="text-right"><a href="{{ url('create') }}" class="btn btn-primary mb-3">Add New</a></div>
             <table class="table text-center">
                 <thead>
                     <tr>
@@ -117,7 +117,8 @@
                                     <a href="{{ url('view-report/' . $report->id . '/edit') }}"
                                         class="btn btn-warning btn-sm">Edit</a>
                                     <a href="{{ url('view-report/' . $report->id . '/delete') }}"
-                                        class="btn btn-danger btn-sm">
+                                        class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure you want to delete this report?')">
                                         Delete
                                     </a>
                                 </td>
