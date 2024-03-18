@@ -79,7 +79,7 @@
             <h1 class="mb-4">Update Report</h1>
             <form action="{{ url('view-report/' . $id . '/edit') }}" method="post">
                 @csrf
-                <div class="border border-white border-3 rounded px-3 mb-4">
+                <div class="border border-secondary border-3 rounded px-3 mb-4">
                     <div>
                         <input type="text" name="name" class="form-control mt-4" id="reportName"
                             value="{{ $name }}" required></input>
@@ -97,10 +97,10 @@
                     </div>
                 </div>
                 <div id="tablesDiv" class="mb-4">
-                    @foreach ($view->tables as $index => $tables)
+                    @foreach ($report_details->tables as $index => $tables)
                         @foreach ($tables as $table => $columns)
                             <div id="dynamicDiv{{ $index }}"
-                                class="tables border border-white border-3 mb-4 rounded px-3">
+                                class="tables border border-secondary border-3 mb-4 rounded px-3">
                                 <div class="g-3">
                                     <label for="table{{ $index }}" class="form-label"></label>
                                     <select name="table[]" id="table{{ $index }}" class="form-select dynamic"
@@ -149,16 +149,20 @@
                                     dependent2="rightTable{{ $index }}" style="margin-bottom: 20px;" required>
                                     <option value="" disabled="">Select Join Type</option>
                                     <option value="inner"
-                                        {{ $view->joins[$index - 1]->join_type === 'inner' ? 'selected' : '' }}>Inner
+                                        {{ $report_details->joins[$index - 1]->join_type === 'inner' ? 'selected' : '' }}>
+                                        Inner
                                         Join</option>
                                     <option value="left"
-                                        {{ $view->joins[$index - 1]->join_type === 'left' ? 'selected' : '' }}>Left
+                                        {{ $report_details->joins[$index - 1]->join_type === 'left' ? 'selected' : '' }}>
+                                        Left
                                         Join</option>
                                     <option value="right"
-                                        {{ $view->joins[$index - 1]->join_type === 'right' ? 'selected' : '' }}>Right
+                                        {{ $report_details->joins[$index - 1]->join_type === 'right' ? 'selected' : '' }}>
+                                        Right
                                         Join</option>
                                     <option value="cross"
-                                        {{ $view->joins[$index - 1]->join_type === 'cross' ? 'selected' : '' }}>Cross
+                                        {{ $report_details->joins[$index - 1]->join_type === 'cross' ? 'selected' : '' }}>
+                                        Cross
                                         Join</option>
                                 </select>
                                 <div class="d-flex flex-row">
@@ -168,17 +172,17 @@
                                             class="form-select dynamicdatas jointablenames leftTablesJoin"
                                             dependent="joinOnDiv{{ $index }}"
                                             data-dependent="leftTableColumn{{ $index }}"
-                                            style="{{ $view->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
-                                            {{ $view->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
+                                            style="{{ $report_details->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
+                                            {{ $report_details->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
                                             <option value="" disabled="">Select Join Table</option>
-                                            @if ($view->joins[$index - 1]->join_type !== 'cross')
+                                            @if ($report_details->joins[$index - 1]->join_type !== 'cross')
                                                 @php
                                                     $i = 0;
                                                 @endphp
-                                                @foreach ($view->tables as $tables)
+                                                @foreach ($report_details->tables as $tables)
                                                     @foreach ($tables as $table => $columns)
                                                         <option value="{{ $table }}"
-                                                            {{ $view->joins[$index - 1]->left_table === $table ? 'selected' : '' }}>
+                                                            {{ $report_details->joins[$index - 1]->left_table === $table ? 'selected' : '' }}>
                                                             {{ $table }}</option>
                                                         @php
                                                             $i++;
@@ -199,13 +203,13 @@
                                             id="leftTableColumn{{ $index }}"
                                             class="form-select joinTables leftTablesColumns"
                                             data-dependent="leftTable{{ $index }}"
-                                            style="{{ $view->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
-                                            {{ $view->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
+                                            style="{{ $report_details->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
+                                            {{ $report_details->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
                                             <option value="" disabled="">Select Join Column</option>
-                                            @if ($view->joins[$index - 1]->join_type !== 'cross')
-                                                @foreach ($selectedTables[$view->joins[$index - 1]->left_table] as $column)
+                                            @if ($report_details->joins[$index - 1]->join_type !== 'cross')
+                                                @foreach ($selectedTables[$report_details->joins[$index - 1]->left_table] as $column)
                                                     <option value="{{ $column }}"
-                                                        {{ $view->joins[$index - 1]->left_column === $column ? 'selected' : '' }}>
+                                                        {{ $report_details->joins[$index - 1]->left_column === $column ? 'selected' : '' }}>
                                                         {{ $column }}
                                                     </option>
                                                 @endforeach
@@ -218,17 +222,17 @@
                                             class="form-select dynamicdatas jointablenames rightTablesJoin"
                                             dependent="joinOnDiv{{ $index }}"
                                             data-dependent="rightTableColumn{{ $index }}"
-                                            style="{{ $view->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
-                                            {{ $view->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
+                                            style="{{ $report_details->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
+                                            {{ $report_details->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
                                             <option value="" disabled="">Select Join Table</option>
-                                            @if ($view->joins[$index - 1]->join_type !== 'cross')
+                                            @if ($report_details->joins[$index - 1]->join_type !== 'cross')
                                                 @php
                                                     $i = 0;
                                                 @endphp
-                                                @foreach ($view->tables as $tables)
+                                                @foreach ($report_details->tables as $tables)
                                                     @foreach ($tables as $table => $columns)
                                                         <option value="{{ $table }}"
-                                                            {{ $view->joins[$index - 1]->right_table === $table ? 'selected' : '' }}>
+                                                            {{ $report_details->joins[$index - 1]->right_table === $table ? 'selected' : '' }}>
                                                             {{ $table }}</option>
                                                         @php
                                                             $i++;
@@ -245,13 +249,13 @@
                                         <select name="joins[{{ $index - 1 }}][right_column]"
                                             id="rightTableColumn{{ $index }}"
                                             class="form-select joinTables rightTablesColumns"
-                                            style="{{ $view->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
-                                            {{ $view->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
+                                            style="{{ $report_details->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
+                                            {{ $report_details->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
                                             <option value="" disabled="">Select Join Column</option>
-                                            @if ($view->joins[$index - 1]->join_type !== 'cross')
-                                                @foreach ($selectedTables[$view->joins[$index - 1]->right_table] as $column)
+                                            @if ($report_details->joins[$index - 1]->join_type !== 'cross')
+                                                @foreach ($selectedTables[$report_details->joins[$index - 1]->right_table] as $column)
                                                     <option value="{{ $column }}"
-                                                        {{ $view->joins[$index - 1]->right_column === $column ? 'selected' : '' }}>
+                                                        {{ $report_details->joins[$index - 1]->right_column === $column ? 'selected' : '' }}>
                                                         {{ $column }}
                                                     </option>
                                                 @endforeach

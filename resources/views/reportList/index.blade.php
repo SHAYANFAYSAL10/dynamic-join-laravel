@@ -11,15 +11,17 @@
     <script src="{{ asset('modules/jquery.slim.min.js') }}"></script>
     <script src="{{ asset('modules/bootstrap.min.js') }}"></script>
     <script src="{{ asset('modules/bootstrap2.min.js') }}"></script>
+    <script src="{{ asset('modules/bootstrap5.min.js') }}"></script>
     <script src="{{ asset('modules/alpine.min.js') }}" defer></script>
     <script src="{{ asset('modules/popper.min.js') }}"></script>
-    <script src="{{ asset('modules/prism-json.min.js') }}"></script>
+    {{-- <script src="{{ asset('modules/prism-json.min.js') }}"></script> --}}
     <script src="{{ asset('modules/prism.js') }}"></script>
     <script src="{{ asset('modules/prism.min.js') }}"></script>
     <script src="{{ asset('modules/cdn.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('modules/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('modules/bootstrap2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('modules/bootstrap3.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css">
 
     <style>
         .container {
@@ -30,7 +32,6 @@
     </style>
 
     <script src="{{ asset('js/modalVisibility.js') }}" defer></script>
-    @vite('resources/css/app.css')
     @routes
 </head>
 
@@ -38,8 +39,8 @@
     <div class="container mt-5">
         <div class="flex justify-between items-center bg-gray-200 p-5 rounded-md">
             <h1>View Reports</h1>
-            <div class="text-right"><a href="{{ url('create') }}" class="btn btn-primary mb-3">Add New</a></div>
-            <table class="table text-center">
+            <div class="text-right"><a href="{{ url('create-report') }}" class="btn btn-primary mb-3">Add New</a></div>
+            <table class="table text-left">
                 <thead>
                     <tr>
                         @if (count($reports) > 0)
@@ -62,17 +63,33 @@
                             <tr>
                                 @foreach ($report as $attribute => $value)
                                     <td>
-                                        @if ($attribute === 'view' || $attribute === 'users')
-                                            @if ($attribute === 'view')
+                                        @if ($attribute === 'report_details' || $attribute === 'users')
+                                            @if ($attribute === 'report_details')
                                                 <button type="submit" class="btn btn-warning text-white btn-sm"
                                                     data-toggle="modal" data-target="#myModal"
-                                                    onclick="getJSON('{{ $value }}')">JSON
+                                                    onclick="getJSON('{{ $value }}','{{ $attribute }}')">JSON
                                                 </button>
                                             @else
-                                                <button type="submit" class="btn btn-danger btn-sm" data-toggle="modal"
+                                                @php
+                                                    $jsonData = json_decode($value);
+                                                    if (empty($jsonData)) {
+                                                        echo 'No users';
+                                                    } else {
+                                                        $firstValue = reset($jsonData);
+                                                        $size = strlen($firstValue);
+                                                        if ($size > 8) {
+                                                            $firstValue = substr($firstValue, 0, 8);
+                                                        }
+                                                        echo $firstValue . ' ...';
+                                                    }
+                                                @endphp
+                                                <a type="submit" class="text-primary" data-toggle="modal"
                                                     data-target="#myModal"
-                                                    onclick="getJSON('{{ $value }}')">Users
-                                                </button>
+                                                    onclick="getJSON('{{ $value }}','{{ $attribute }}')">
+                                                    @if ($value !== '[]')
+                                                        more
+                                                    @endif
+                                                </a>
                                             @endif
                                             <div class="modal" id="myModal">
                                                 <div class="modal-dialog">
@@ -80,12 +97,8 @@
 
                                                         <!-- Modal Header -->
                                                         <div class="modal-header">
-                                                            <h4 class="modal-title">
-                                                                @if ($attribute === 'view')
-                                                                    JSON Data
-                                                                @else
-                                                                    Users
-                                                                @endif
+                                                            <h4 id="titleOfModal" class="modal-title"
+                                                                style="text-transform: capitalize;">
                                                             </h4>
                                                             <button type="button" class="close"
                                                                 data-dismiss="modal">&times;</button>
@@ -107,7 +120,12 @@
                                                     </div>
                                                 </div>
                                             @else
-                                                {{ $value }}
+                                                @if ($attribute === 'created_at' || $attribute === 'updated_at')
+                                                    <?php $firstWord = strtok($value, ' '); ?>
+                                                    {{ $firstWord }}
+                                                @else
+                                                    {{ $value }}
+                                                @endif
                                         @endif
                                     </td>
                                 @endforeach
@@ -115,7 +133,7 @@
                                     <a href="{{ url('/view-report/' . $report->id) }}" title="View Report Data"
                                         class="btn btn-info btn-sm">View</a>
                                     <a href="{{ url('view-report/' . $report->id . '/edit') }}"
-                                        class="btn btn-warning btn-sm">Edit</a>
+                                        class="btn btn-warning text-white btn-sm">Edit</a>
                                     <a href="{{ url('view-report/' . $report->id . '/delete') }}"
                                         class="btn btn-danger btn-sm"
                                         onclick="return confirm('Are you sure you want to delete this report?')">
@@ -132,8 +150,8 @@
 
 </html>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script> --}}
+{{-- <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script> --}}
+{{-- <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> --}}
 
 {{-- @include('reportList.modal') --}}

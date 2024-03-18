@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->json('view');
+            $table->json('report_details');
             $table->json('users')->nullable();
             $table->timestamps();
         });

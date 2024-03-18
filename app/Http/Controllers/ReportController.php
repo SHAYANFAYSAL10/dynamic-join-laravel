@@ -58,7 +58,7 @@ class ReportController extends Controller
     public function showData($id)
     {
         $report = Report::find($id);
-        $data = $report->view;
+        $data = $report->report_details;
         $name = $report->name;
         $duplicateKeys = $this->duplicateKeys($data);
         $result = $this->generateSqlQuery($data, $duplicateKeys);
@@ -78,12 +78,12 @@ class ReportController extends Controller
         $tableNames = array_map('current', $tableNames);
         $results = DB::table('reports')
             ->where('id', $id)
-            ->select('name', 'view', 'users')->get();
+            ->select('name', 'report_details', 'users')->get();
         $name = $results[0]->name;
-        $view = $results[0]->view;
-        $view = json_decode($view);
+        $report_details = $results[0]->report_details;
+        $report_details = json_decode($report_details);
         $selectedTables = [];
-        foreach ($view->tables as $index => $tables) {
+        foreach ($report_details->tables as $index => $tables) {
             foreach ($tables as $table => $columns) {
                 $allcolumns = DB::getSchemaBuilder()->getColumnListing($table);
                 $selectedTables[$table] = $allcolumns;
@@ -94,24 +94,24 @@ class ReportController extends Controller
         $selectedUsers = json_decode($selectedUsers);
         $userNames = User::pluck('name')->all();
         // dd($view);
-        return view('adminViewCreate.edit', ['view' => $view, 'name' => $name, 'selectedTables' => $selectedTables, 'selectedUsers' => $selectedUsers, 'id' => $id, 'tableNames' => $tableNames, 'users' => $userNames]);
+        return view('adminViewCreate.edit', ['report_details' => $report_details, 'name' => $name, 'selectedTables' => $selectedTables, 'selectedUsers' => $selectedUsers, 'id' => $id, 'tableNames' => $tableNames, 'users' => $userNames]);
         // dd(implode(', ', array_keys($result['tables'][0])));
     }
 
     public function editForm(Request $request, $id)
     {
         $users = $request['users'];
-        if (empty($request['users'])) {
+        if (empty ($request['users'])) {
             $users = [];
         }
         $name = $request['name'];
         $data = $request->except(['_token', 'table', 'users', 'name']);
-        if (!isset($data['joins'])) {
+        if (!isset ($data['joins'])) {
             $data['joins'] = [];
         }
         // dd($id);
         // dd($data);
-        $updatedData = ['view' => $data, 'name' => $name, 'users' => $users];
+        $updatedData = ['report_details' => $data, 'name' => $name, 'users' => $users];
         $report = Report::find($id);
         $report->update($updatedData);
         echo "<pre>";

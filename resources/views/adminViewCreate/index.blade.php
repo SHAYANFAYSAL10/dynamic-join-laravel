@@ -71,9 +71,9 @@
     <div class="container center-button">
         <div class="container-bg row">
             <h1 class="mb-4">Create Report</h1>
-            <form action="{{ url('/') }}/create" method="post">
+            <form action="{{ url('/') }}/create-report" method="post">
                 @csrf
-                <div class="border border-white border-3 rounded px-3 mb-4">
+                <div class="border border-secondary border-3 rounded px-3 mb-4">
                     <div>
                         <input type="text" name="name" class="form-control mt-4" id="reportName"
                             placeholder="Report Name" required>
@@ -88,7 +88,7 @@
                     </div>
                 </div>
                 <div id="tablesDiv" class="mb-4">
-                    <div id="dynamicDiv0" class="tables border border-white border-3 mb-4 rounded px-3">
+                    <div id="dynamicDiv0" class="tables border border-secondary border-3 mb-4 rounded px-3">
                         <div class="g-3">
                             <label for="table0" class="form-label"></label>
                             <select name="table[]" id="table0" class="form-select mt-0 dynamic"
