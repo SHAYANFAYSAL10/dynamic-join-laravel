@@ -14,9 +14,9 @@
     <script src="{{ asset('modules/bootstrap5.min.js') }}"></script>
     <script src="{{ asset('modules/alpine.min.js') }}" defer></script>
     <script src="{{ asset('modules/popper.min.js') }}"></script>
-    {{-- <script src="{{ asset('modules/prism-json.min.js') }}"></script> --}}
     <script src="{{ asset('modules/prism.js') }}"></script>
     <script src="{{ asset('modules/prism.min.js') }}"></script>
+    <script src="{{ asset('modules/prism-json.min.js') }}"></script>
     <script src="{{ asset('modules/cdn.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('modules/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('modules/bootstrap2.min.css') }}">
