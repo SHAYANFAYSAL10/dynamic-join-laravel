@@ -12,26 +12,45 @@ class ReportController extends Controller
     protected function generateSqlQuery($data, $duplicateKeys)
     {
         $selectColumns = [];
+        $emptyMap = [];
+        $aliasofTables = [];
         $tableNames = [];
         foreach ($data['tables'] as $indexes => $tables) {
             foreach ($tables as $tablename => $columns) {
                 $tableNames[] = $tablename;
+                if (isset ($emptyMap[$tablename])) {
+                    $emptyMap[$tablename]['count']++;
+                } else {
+                    $emptyMap[$tablename]['count'] = 1; // Initialize value to 1
+                }
+                $tempAlias = '';
+                for ($i = 0; $i < $emptyMap[$tablename]['count']; $i++) {
+                    $tempAlias .= $tablename;
+                }
+                $aliasofTables[] = $tempAlias;
                 foreach ($columns as $column) {
-                    $selectColumns[] = in_array($column, $duplicateKeys) != 0 ? "$tablename.$column as {$tablename}_{$column}" : "$tablename.$column";
+                    if (isset ($emptyMap[$tablename][$column])) {
+                        $emptyMap[$tablename][$column]++;
+                    } else {
+                        $selectColumns[] = in_array($column, $duplicateKeys) != 0 ? "$aliasofTables[$indexes].$column as {$tablename}_{$column}" : "$tablename.$column";
+                        $emptyMap[$tablename][$column] = 1;
+                    }
                 }
             }
         }
+        // dd($emptyMap);
         $selectColumns = implode(', ', $selectColumns);
         $numberOfIteration = 1;
         $joinClauses = '';
         $tableAlias = $tableNames[0];
         $joinClauses .= $tableAlias . " ";
         foreach ($data['joins'] as $join) {
-            $joinClauses .= "{$join['join_type']} JOIN {$tableNames[$numberOfIteration]}";
+            $joinClauses .= "{$join['join_type']} JOIN {$tableNames[$numberOfIteration]} {$aliasofTables[$numberOfIteration]}";
             $onCommand = $join['join_type'] !== 'cross' ? " ON {$join['left_table']}.{$join['left_column']} = {$join['right_table']}.{$join['right_column']} " : " ";
             $joinClauses .= $onCommand;
             $numberOfIteration++;
         }
+        // dd($joinClauses);
 
         return "SELECT $selectColumns FROM $joinClauses";
     }
