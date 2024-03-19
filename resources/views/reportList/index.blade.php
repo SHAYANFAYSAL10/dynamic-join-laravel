@@ -22,16 +22,8 @@
     <link rel="stylesheet" href="{{ asset('modules/bootstrap2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('modules/bootstrap3.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css">
-
-    <style>
-        .container {
-            background-color: #f5f2f0;
-            min-height: 600px;
-            margin-bottom: 50px;
-        }
-    </style>
-
     <script src="{{ asset('js/modalVisibility.js') }}" defer></script>
+    <link rel="stylesheet" href="{{ asset('css/container.css') }}">
     @routes
 </head>
 

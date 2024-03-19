@@ -1,0 +1,9 @@
+body {
+    background-color: #ffffff;
+}
+
+.container {
+    background-color: #f5f2f0;
+    min-height: 600px;
+    margin-bottom: 50px;
+}

@@ -5,88 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Report</title>
-    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
     <script type="module" src="{{ asset('js/columnNameFetcher.mjs') }}" defer></script>
-    {{-- <script type="module" src="{{ asset('js/tableDataViewer.mjs') }}" defer></script>
-    <script type="module" src="{{ asset('js/tableDataFetcher.mjs') }}" defer></script> --}}
-    {{-- <script type="module" src="{{ asset('js/joinedDataFetcher.mjs') }}" defer></script> --}}
     <script type="module" src="{{ asset('js/addTables.mjs') }}" defer></script>
-    {{-- <script type="module" src="{{ asset('js/editReport.mjs') }}" defer></script> --}}
-    {{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script> --}}
-    {{-- <link rel="stylesheet" href="{{ asset('modules/prism.min.css') }}"> --}}
     <script src="{{ asset('modules/jquery.min.js') }}"></script>
-    {{-- <script src="{{ asset('modules/jquery.slim.min.js') }}"></script> --}}
     <script src="{{ asset('modules/bootstrap.min.js') }}"></script>
     <script src="{{ asset('modules/bootstrap2.min.js') }}"></script>
-    {{-- <script src="{{ asset('modules/alpine.min.js') }}" defer></script> --}}
-    {{-- <script src="{{ asset('modules/popper.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('modules/prism-json.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('modules/prism.js') }}"></script> --}}
-    {{-- <script src="{{ asset('modules/prism.min.js') }}"></script> --}}
-    {{-- <script src="{{ asset('modules/cdn.min.js') }}"></script> --}}
     <link rel="stylesheet" href="{{ asset('modules/bootstrap.min.css') }}">
-    {{-- <link rel="stylesheet" href="{{ asset('modules/bootstrap2.min.css') }}"> --}}
-    {{-- <link rel="stylesheet" href="{{ asset('modules/bootstrap3.min.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('css/create.css') }}">
     @routes
-    <style>
-        body {
-            background-color: #ffffff;
-        }
-
-        .container-bg {
-            background-color: #f5f2f0;
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        .container {
-            margin-top: 50px;
-            margin-bottom: 50px;
-        }
-
-
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        #addTableDiv {
-            text-align: right;
-        }
-
-        #addTable {
-            font-size: 1.5em;
-        }
-
-        .center-button {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .shadow-line {
-            box-shadow: 0px 4px 5px -2px rgba(0, 0, 0, 0.75);
-        }
-
-        .close-button {
-            position: relative;
-        }
-
-        .close-button .close {
-            position: absolute;
-            top: -5px;
-            right: 10px;
-            z-index: 1;
-            background: none;
-            border: none;
-            color: black;
-            padding: 0;
-            font-size: 1.5rem;
-            font-weight: 300;
-        }
-    </style>
 </head>
 
 <body>

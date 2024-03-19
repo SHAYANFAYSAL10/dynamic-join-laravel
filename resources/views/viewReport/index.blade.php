@@ -31,23 +31,7 @@
     <link rel="stylesheet" href="{{ asset('modules/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('modules/bootstrap2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('modules/bootstrap3.min.css') }}">
-
-    <!-- Custom CSS -->
-    <style>
-        body {
-            background-color: #ffffff;
-        }
-
-        .container {
-            background-color: #f5f2f0;
-            min-height: 600px;
-            margin-bottom: 50px;
-        }
-    </style>
-
-    <!-- Bootstrap JS -->
-    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
-
+    <link rel="stylesheet" href="{{ asset('css/container.css') }}">
     @routes
 </head>
 
