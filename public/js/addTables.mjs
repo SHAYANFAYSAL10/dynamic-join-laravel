@@ -1,10 +1,4 @@
 import { columnNameRetriever } from "./columnNameFetcher.mjs";
-// export { cloneTable };
-// import {
-//     getTableNames,
-//     handleTableColumnChange,
-//     joinChange,
-// } from "./joinedDataFetcher.mjs";
 
 let cloneTable;
 let tableNameRetriever;
@@ -27,18 +21,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
     incrementnumberOfTables = function () {
         numberOfTables++;
-        console.log(numberOfTables);
+        // console.log(numberOfTables);
     };
 
     cloneTable = function () {
         numberOfTables++;
         let newDiv = dynamicDiv.cloneNode(true);
-        // let newDivId = "dynamicDiv" + numberOfTables;
-        // newDiv.id = newDivId;
+        newDiv.setAttribute("id", `dynamicDiv${numberOfTables}`);
+        let button = document.createElement("button");
+        button.setAttribute("type", "button");
+        button.classList.add("close");
+        button.setAttribute("aria-label", "Close");
+        button.setAttribute("id", "customCloseButton0");
+        let span = document.createElement("span");
+        span.setAttribute("aria-hidden", "true");
+        span.innerHTML = "&times;";
+        button.appendChild(span);
+        newDiv.appendChild(button);
         updateElementIds(newDiv, numberOfTables, "id");
-        // updateElementIds(newDiv, numberOfTables, "name");
         updateElementIds(newDiv, numberOfTables, "data-dependent");
         updateElementIds(newDiv, numberOfTables, "dependent");
+
+        button.addEventListener("click", deleteTable);
+
         tablesDiv.appendChild(newDiv);
         allDynamic = document.querySelectorAll(".dynamic");
         let table = document.getElementById(`table${numberOfTables}`);
@@ -48,7 +53,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
         tableColumns.innerHTML = "<option>Select Columns</option>";
         createJoinDiv();
-        // joins = document.querySelectorAll(".joins");
         let join = document.getElementById(`tablesJoin${numberOfTables}`);
         attachEventListeners(table, join);
     };
@@ -65,8 +69,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function attachEventListeners(table, join) {
         $(table).change(columnNameRetriever);
         $(table).change(tableNameRetriever);
-        // $(table).change(getTableNames);
-        // $(tableColumns).change(handleTableColumnChange);
         $(join).change(handleJoinChange);
     }
 
@@ -75,12 +77,33 @@ document.addEventListener("DOMContentLoaded", function () {
         let columnfieldId = document.getElementById($(this).attr("dependent"));
         let numericPart = columnfield.match(/\d+$/);
         columnfieldId.name = `tables[${numericPart}][${this.value}][]`;
-        tableNames = [];
-        allDynamic.forEach(function (selectElement) {
-            tableNames.push(selectElement.value);
-        });
+        selectedTableNames();
         matchingTableRetriever(numericPart);
     };
+
+    function selectedTableNames() {
+        tableNames = [];
+        for (let i = 0; i <= numberOfTables; i++) {
+            let tableNo = document.getElementById(`table${i}`);
+            if (tableNo) {
+                tableNames.push(tableNo.value);
+            } else {
+                tableNames.push("");
+            }
+        }
+        // console.log(tableNames);
+    }
+
+    function deleteTable() {
+        let crossButtonId = this.id;
+        let numericPart = crossButtonId.match(/\d+$/);
+        let tableDivId = document.getElementById(`dynamicDiv${numericPart}`);
+        let joinDivId = document.getElementById(`joinOnDiv${numericPart}`);
+        tableDivId.remove();
+        joinDivId.remove();
+        selectedTableNames();
+        matchingTableRetriever(numericPart);
+    }
 
     function createJoinDiv() {
         let joinOnDiv = document.createElement("div");
@@ -156,18 +179,8 @@ document.addEventListener("DOMContentLoaded", function () {
         rightTableDiv.appendChild(newSelect);
         joinTableDiv.appendChild(rightTableDiv);
 
-        //
-        //
-
         joinOnDiv.appendChild(tablesJoinSelect);
         joinOnDiv.appendChild(joinTableDiv);
-        // joinOnDiv.appendChild(document.createElement("br"));
-        // joinOnDiv.appendChild(document.createElement("br"));
-        // joinOnDiv.appendChild(leftTable);
-        // joinOnDiv.appendChild(newSelect);
-
-        // joinOnDiv.appendChild(rightTable);
-        // joinOnDiv.appendChild(newSelect);
 
         updateElementIds(joinOnDiv, numberOfTables, "id");
         updateElementIds(joinOnDiv, numberOfTables, "dependent");
@@ -176,11 +189,8 @@ document.addEventListener("DOMContentLoaded", function () {
         updateElementIds(joinOnDiv, numberOfTables, "data-dependent");
 
         tablesDiv.appendChild(joinOnDiv);
-        // matchingTableRetriever();
         $(leftTable).change(columnNameRetriever);
         $(rightTable).change(columnNameRetriever);
-        // $(tablesJoinSelect).change(joinChange);
-        // handleJoinChange();
     }
 
     function matchingTableRetriever(index) {
@@ -189,38 +199,34 @@ document.addEventListener("DOMContentLoaded", function () {
         }
         for (let j = index; j <= numberOfTables; j++) {
             let left = document.getElementById(`leftTable${j}`);
-            let right = document.getElementById(`rightTable${j}`);
-            let leftColumn = document.getElementById(`leftTableColumn${j}`);
-            let rightColumn = document.getElementById(`rightTableColumn${j}`);
-            left.innerHTML = `<option value="" disabled selected>Select Join Table</option>`;
-            right.innerHTML = `<option value="" disabled selected>Select Join Table</option>`;
-            leftColumn.innerHTML = `<option value="" disabled selected>Select Join Column</option>`;
-            rightColumn.innerHTML = `<option value="" disabled selected>Select Join Column</option>`;
-            for (let i = 0; i <= j; i++) {
-                let newOption = document.createElement("option");
-                newOption.value = tableNames[i];
-                newOption.text = tableNames[i];
-                left.appendChild(newOption);
-            }
-            for (let i = 0; i <= j; i++) {
-                let newOption = document.createElement("option");
-                newOption.value = tableNames[i];
-                newOption.text = tableNames[i];
-                right.appendChild(newOption);
+            if (left) {
+                let right = document.getElementById(`rightTable${j}`);
+                let leftColumn = document.getElementById(`leftTableColumn${j}`);
+                let rightColumn = document.getElementById(
+                    `rightTableColumn${j}`
+                );
+                left.innerHTML = `<option value="" disabled selected>Select Join Table</option>`;
+                right.innerHTML = `<option value="" disabled selected>Select Join Table</option>`;
+                leftColumn.innerHTML = `<option value="" disabled selected>Select Join Column</option>`;
+                rightColumn.innerHTML = `<option value="" disabled selected>Select Join Column</option>`;
+                for (let i = 0; i <= j; i++) {
+                    if (tableNames[i] !== "") {
+                        let newOption = document.createElement("option");
+                        newOption.value = tableNames[i];
+                        newOption.text = tableNames[i];
+                        left.appendChild(newOption);
+                    }
+                }
+                for (let i = 0; i <= j; i++) {
+                    if (tableNames[i] !== "") {
+                        let newOption = document.createElement("option");
+                        newOption.value = tableNames[i];
+                        newOption.text = tableNames[i];
+                        right.appendChild(newOption);
+                    }
+                }
             }
         }
-        // let jointablenames = document.querySelectorAll(".jointablenames");
-        // jointablenames.forEach(function (tableName) {
-        //     console.log(tableName.id);
-        //     let numericPart = tableName.id.match(/\d+$/);
-        //     tableName.innerHTML = `<option value="" disabled selected>Select Join Table</option>`;
-        //     for (let i = 0; i <= numericPart; i++) {
-        //         let newOption = document.createElement("option");
-        //         newOption.value = tableNames[i];
-        //         newOption.text = tableNames[i];
-        //         tableName.appendChild(newOption);
-        //     }
-        // });
     }
 
     function createDefaultOption(parentElementId, texts) {
@@ -267,23 +273,21 @@ document.addEventListener("DOMContentLoaded", function () {
             leftTableColumn.style.marginBottom = "20px";
             rightTableColumn.style.marginBottom = "20px";
         }
-        // console.log(this.dependent1);
-        // this.style.display = "none";
     };
 
     $(allDynamic).change(columnNameRetriever);
-    // // $(allDynamic).change(getTableNames);
-    // // $(alltableColumnChanged).change(handleTableColumnChange);
-    // // $(joins).change(joinChange);
     $(allDynamic).change(tableNameRetriever);
     $(joins).change(handleJoinChange);
     let allJoinTables = document.querySelectorAll(".jointablenames");
     $(allJoinTables).change(columnNameRetriever);
-    // $(table).change(tableNameRetriever);
     $("#addTableDiv").on("click", function (event) {
         event.preventDefault();
     });
     addButton.addEventListener("click", cloneTable);
+    let closeButtons = document.querySelectorAll(".close-button");
+    closeButtons.forEach(function (button) {
+        button.addEventListener("click", deleteTable);
+    });
 });
 export {
     cloneTable,

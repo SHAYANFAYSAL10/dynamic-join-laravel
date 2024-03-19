@@ -66,9 +66,25 @@
             align-items: center;
         }
 
-        /* Style for Select2 */
-        .select2-container {
-            width: 100% !important;
+        .shadow-line {
+            box-shadow: 0px 4px 5px -2px rgba(0, 0, 0, 0.75);
+        }
+
+        .close-button {
+            position: relative;
+        }
+
+        .close-button .close {
+            position: absolute;
+            top: -5px;
+            right: 10px;
+            z-index: 1;
+            background: none;
+            border: none;
+            color: black;
+            padding: 0;
+            font-size: 1.5rem;
+            font-weight: 300;
         }
     </style>
 </head>
@@ -79,7 +95,7 @@
             <h1 class="mb-4">Update Report</h1>
             <form action="{{ url('view-report/' . $id . '/edit') }}" method="post">
                 @csrf
-                <div class="border border-secondary border-3 rounded px-3 mb-4">
+                <div class="shadow-line p-3 mb-5 rounded">
                     <div>
                         <input type="text" name="name" class="form-control mt-4" id="reportName"
                             value="{{ $name }}" required></input>
@@ -100,7 +116,7 @@
                     @foreach ($report_details->tables as $index => $tables)
                         @foreach ($tables as $table => $columns)
                             <div id="dynamicDiv{{ $index }}"
-                                class="tables border border-secondary border-3 mb-4 rounded px-3">
+                                class="tables shadow-line close-button p-3 mb-5 rounded">
                                 <div class="g-3">
                                     <label for="table{{ $index }}" class="form-label"></label>
                                     <select name="table[]" id="table{{ $index }}" class="form-select dynamic"
@@ -130,6 +146,15 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                @if ($index !== 0)
+                                    <button type="button" id="customCloseButton{{ $index }}" class="close"
+                                        aria-label="Close">
+                                        <span class="close-wrapper">
+                                            <span class="close" aria-hidden="true">&times;</span>
+                                            <!-- Cross inside a wrapper -->
+                                        </span>
+                                    </button>
+                                @endif
                             </div>
                         @endforeach
                         @if ($index !== 0)

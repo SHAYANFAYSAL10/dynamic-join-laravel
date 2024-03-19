@@ -8,9 +8,9 @@
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
     <script type="module" src="{{ asset('js/columnNameFetcher.mjs') }}" defer></script>
-    <script type="module" src="{{ asset('js/tableDataViewer.mjs') }}" defer></script>
+    {{-- <script type="module" src="{{ asset('js/tableDataViewer.mjs') }}" defer></script>
     <script type="module" src="{{ asset('js/tableDataFetcher.mjs') }}" defer></script>
-    <script type="module" src="{{ asset('js/joinedDataFetcher.mjs') }}" defer></script>
+    <script type="module" src="{{ asset('js/joinedDataFetcher.mjs') }}" defer></script> --}}
     <script type="module" src="{{ asset('js/addTables.mjs') }}" defer></script>
     {{-- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script> --}}
@@ -64,6 +64,27 @@
             flex-direction: column;
             align-items: center;
         }
+
+        .shadow-line {
+            box-shadow: 0px 4px 5px -2px rgba(0, 0, 0, 0.75);
+        }
+
+        .close-button {
+            position: relative;
+        }
+
+        .close-button .close {
+            position: absolute;
+            top: -5px;
+            right: 10px;
+            z-index: 1;
+            background: none;
+            border: none;
+            color: black;
+            padding: 0;
+            font-size: 1.5rem;
+            font-weight: 300;
+        }
     </style>
 </head>
 
@@ -73,7 +94,7 @@
             <h1 class="mb-4">Create Report</h1>
             <form action="{{ url('/') }}/create-report" method="post">
                 @csrf
-                <div class="border border-secondary border-3 rounded px-3 mb-4">
+                <div class="shadow-line p-3 mb-5 rounded">
                     <div>
                         <input type="text" name="name" class="form-control mt-4" id="reportName"
                             placeholder="Report Name" required>
@@ -88,7 +109,7 @@
                     </div>
                 </div>
                 <div id="tablesDiv" class="mb-4">
-                    <div id="dynamicDiv0" class="tables border border-secondary border-3 mb-4 rounded px-3">
+                    <div id="dynamicDiv0" class="tables shadow-line close-button p-3 mb-5 rounded">
                         <div class="g-3">
                             <label for="table0" class="form-label"></label>
                             <select name="table[]" id="table0" class="form-select mt-0 dynamic"
@@ -105,6 +126,9 @@
                                 <option value="">Select Columns</option>
                             </select>
                         </div>
+                        {{-- <button type="button" class="close" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button> --}}
                     </div>
                 </div>
                 <div id="addTableDiv" class="mt-3" type="button">
