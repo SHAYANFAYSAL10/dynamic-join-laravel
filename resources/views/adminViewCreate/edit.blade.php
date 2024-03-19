@@ -8,8 +8,8 @@
     {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet" /> --}}
     <script type="module" src="{{ asset('js/columnNameFetcher.mjs') }}" defer></script>
-    <script type="module" src="{{ asset('js/tableDataViewer.mjs') }}" defer></script>
-    <script type="module" src="{{ asset('js/tableDataFetcher.mjs') }}" defer></script>
+    {{-- <script type="module" src="{{ asset('js/tableDataViewer.mjs') }}" defer></script>
+    <script type="module" src="{{ asset('js/tableDataFetcher.mjs') }}" defer></script> --}}
     {{-- <script type="module" src="{{ asset('js/joinedDataFetcher.mjs') }}" defer></script> --}}
     <script type="module" src="{{ asset('js/addTables.mjs') }}" defer></script>
     {{-- <script type="module" src="{{ asset('js/editReport.mjs') }}" defer></script> --}}
@@ -147,8 +147,8 @@
                                     </select>
                                 </div>
                                 @if ($index !== 0)
-                                    <button type="button" id="customCloseButton{{ $index }}" class="close"
-                                        aria-label="Close">
+                                    <button type="button" id="customCloseButton{{ $index }}"
+                                        class="close closeButton" aria-label="Close">
                                         <span class="close-wrapper">
                                             <span class="close" aria-hidden="true">&times;</span>
                                             <!-- Cross inside a wrapper -->
