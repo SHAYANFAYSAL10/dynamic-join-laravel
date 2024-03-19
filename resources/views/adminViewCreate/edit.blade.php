@@ -76,7 +76,7 @@
                                     <button type="button" id="customCloseButton{{ $index }}"
                                         class="close closeButton" aria-label="Close">
                                         <span class="close-wrapper">
-                                            <span class="close" aria-hidden="true">&times;</span>
+                                            <span class="" aria-hidden="true">&times;</span>
                                             <!-- Cross inside a wrapper -->
                                         </span>
                                     </button>

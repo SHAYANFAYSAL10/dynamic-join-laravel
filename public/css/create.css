@@ -54,5 +54,5 @@ body {
 }
 
 .close:hover {
-    transform: scale(1.1); /* Increase size on hover */
+    transform: scale(1.2); /* Increase size on hover */
   }
