@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
         newDiv.setAttribute("id", `dynamicDiv${numberOfTables}`);
         let button = document.createElement("button");
         button.setAttribute("type", "button");
-        button.classList.add("close closeButton");
+        button.classList.add("close");
         button.setAttribute("aria-label", "Close");
         button.setAttribute("id", "customCloseButton0");
         let span = document.createElement("span");
