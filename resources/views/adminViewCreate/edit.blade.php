@@ -39,7 +39,17 @@
                     </div>
                 </div>
                 <div id="tablesDiv" class="mb-4">
-                    @foreach ($report_details->tables as $index => $tables)
+                    @php
+                        $tablesArray = json_decode(json_encode($report_details->tables), true);
+                        $keys = array_keys($tablesArray);
+                        $numberOfDiv = 0;
+                        $joinsArray = json_decode(json_encode($report_details->joins), true);
+                    @endphp
+                    @foreach ($report_details->tables as $nothing => $tables)
+                        @php
+                            $index = $keys[$numberOfDiv];
+                            $index = intval($index);
+                        @endphp
                         @foreach ($tables as $table => $columns)
                             <div id="dynamicDiv{{ $index }}"
                                 class="tables shadow-line close-button p-3 mb-5 rounded">
@@ -72,7 +82,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                @if ($index !== 0)
+                                @if ($index != 0)
                                     <button type="button" id="customCloseButton{{ $index }}"
                                         class="close closeButton" aria-label="Close">
                                         <span class="close-wrapper">
@@ -83,13 +93,14 @@
                                 @endif
                             </div>
                         @endforeach
-                        @if ($index !== 0)
+                        @if ($index != 0)
                             <script type="module">
                                 import {
                                     incrementnumberOfTables
                                 } from "{{ asset('js/addTables.mjs') }}";
                                 document.addEventListener("DOMContentLoaded", function() {
-                                    incrementnumberOfTables();
+                                    let index = {{ $index }};
+                                    incrementnumberOfTables(index);
                                 });
                             </script>
                             <div id="joinOnDiv{{ $index }}">
@@ -100,19 +111,19 @@
                                     dependent2="rightTable{{ $index }}" style="margin-bottom: 20px;" required>
                                     <option value="" disabled="">Select Join Type</option>
                                     <option value="inner"
-                                        {{ $report_details->joins[$index - 1]->join_type === 'inner' ? 'selected' : '' }}>
+                                        {{ $joinsArray[$index - 1]['join_type'] === 'inner' ? 'selected' : '' }}>
                                         Inner
                                         Join</option>
                                     <option value="left"
-                                        {{ $report_details->joins[$index - 1]->join_type === 'left' ? 'selected' : '' }}>
+                                        {{ $joinsArray[$index - 1]['join_type'] === 'left' ? 'selected' : '' }}>
                                         Left
                                         Join</option>
                                     <option value="right"
-                                        {{ $report_details->joins[$index - 1]->join_type === 'right' ? 'selected' : '' }}>
+                                        {{ $joinsArray[$index - 1]['join_type'] === 'right' ? 'selected' : '' }}>
                                         Right
                                         Join</option>
                                     <option value="cross"
-                                        {{ $report_details->joins[$index - 1]->join_type === 'cross' ? 'selected' : '' }}>
+                                        {{ $joinsArray[$index - 1]['join_type'] === 'cross' ? 'selected' : '' }}>
                                         Cross
                                         Join</option>
                                 </select>
@@ -123,17 +134,17 @@
                                             class="form-select dynamicdatas jointablenames leftTablesJoin"
                                             dependent="joinOnDiv{{ $index }}"
                                             data-dependent="leftTableColumn{{ $index }}"
-                                            style="{{ $report_details->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
-                                            {{ $report_details->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
+                                            style="{{ $joinsArray[$index - 1]['join_type'] === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
+                                            {{ $joinsArray[$index - 1]['join_type'] !== 'cross' ? 'required' : '' }}>
                                             <option value="" disabled="">Select Join Table</option>
-                                            @if ($report_details->joins[$index - 1]->join_type !== 'cross')
+                                            @if ($joinsArray[$index - 1]['join_type'] !== 'cross')
                                                 @php
                                                     $i = 0;
                                                 @endphp
                                                 @foreach ($report_details->tables as $tables)
                                                     @foreach ($tables as $table => $columns)
                                                         <option value="{{ $table }}"
-                                                            {{ $report_details->joins[$index - 1]->left_table === $table ? 'selected' : '' }}>
+                                                            {{ $joinsArray[$index - 1]['left_table'] === $table ? 'selected' : '' }}>
                                                             {{ $table }}</option>
                                                         @php
                                                             $i++;
@@ -154,13 +165,13 @@
                                             id="leftTableColumn{{ $index }}"
                                             class="form-select joinTables leftTablesColumns"
                                             data-dependent="leftTable{{ $index }}"
-                                            style="{{ $report_details->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
-                                            {{ $report_details->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
+                                            style="{{ $joinsArray[$index - 1]['join_type'] === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
+                                            {{ $joinsArray[$index - 1]['join_type'] !== 'cross' ? 'required' : '' }}>
                                             <option value="" disabled="">Select Join Column</option>
-                                            @if ($report_details->joins[$index - 1]->join_type !== 'cross')
-                                                @foreach ($selectedTables[$report_details->joins[$index - 1]->left_table] as $column)
+                                            @if ($joinsArray[$index - 1]['join_type'] !== 'cross')
+                                                @foreach ($selectedTables[$joinsArray[$index - 1]['left_table']] as $column)
                                                     <option value="{{ $column }}"
-                                                        {{ $report_details->joins[$index - 1]->left_column === $column ? 'selected' : '' }}>
+                                                        {{ $joinsArray[$index - 1]['left_column'] === $column ? 'selected' : '' }}>
                                                         {{ $column }}
                                                     </option>
                                                 @endforeach
@@ -173,17 +184,17 @@
                                             class="form-select dynamicdatas jointablenames rightTablesJoin"
                                             dependent="joinOnDiv{{ $index }}"
                                             data-dependent="rightTableColumn{{ $index }}"
-                                            style="{{ $report_details->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
-                                            {{ $report_details->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
+                                            style="{{ $joinsArray[$index - 1]['join_type'] === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
+                                            {{ $joinsArray[$index - 1]['join_type'] !== 'cross' ? 'required' : '' }}>
                                             <option value="" disabled="">Select Join Table</option>
-                                            @if ($report_details->joins[$index - 1]->join_type !== 'cross')
+                                            @if ($joinsArray[$index - 1]['join_type'] !== 'cross')
                                                 @php
                                                     $i = 0;
                                                 @endphp
                                                 @foreach ($report_details->tables as $tables)
                                                     @foreach ($tables as $table => $columns)
                                                         <option value="{{ $table }}"
-                                                            {{ $report_details->joins[$index - 1]->right_table === $table ? 'selected' : '' }}>
+                                                            {{ $joinsArray[$index - 1]['right_table'] === $table ? 'selected' : '' }}>
                                                             {{ $table }}</option>
                                                         @php
                                                             $i++;
@@ -200,13 +211,13 @@
                                         <select name="joins[{{ $index - 1 }}][right_column]"
                                             id="rightTableColumn{{ $index }}"
                                             class="form-select joinTables rightTablesColumns"
-                                            style="{{ $report_details->joins[$index - 1]->join_type === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
-                                            {{ $report_details->joins[$index - 1]->join_type !== 'cross' ? 'required' : '' }}>
+                                            style="{{ $joinsArray[$index - 1]['join_type'] === 'cross' ? 'display: none;' : 'display: block; margin-bottom: 20px;' }}"
+                                            {{ $joinsArray[$index - 1]['join_type'] !== 'cross' ? 'required' : '' }}>
                                             <option value="" disabled="">Select Join Column</option>
-                                            @if ($report_details->joins[$index - 1]->join_type !== 'cross')
-                                                @foreach ($selectedTables[$report_details->joins[$index - 1]->right_table] as $column)
+                                            @if ($joinsArray[$index - 1]['join_type'] !== 'cross')
+                                                @foreach ($selectedTables[$joinsArray[$index - 1]['right_table']] as $column)
                                                     <option value="{{ $column }}"
-                                                        {{ $report_details->joins[$index - 1]->right_column === $column ? 'selected' : '' }}>
+                                                        {{ $joinsArray[$index - 1]['right_column'] === $column ? 'selected' : '' }}>
                                                         {{ $column }}
                                                     </option>
                                                 @endforeach
@@ -216,6 +227,9 @@
                                 </div>
                             </div>
                         @endif
+                        @php
+                            $numberOfDiv++;
+                        @endphp
                     @endforeach
                 </div>
                 <div id="addTableDiv" class="mt-3" type="button">

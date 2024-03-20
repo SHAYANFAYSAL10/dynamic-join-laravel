@@ -19,8 +19,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let dynamicDiv = document.getElementById("dynamicDiv0");
     let tablesDiv = document.getElementById("tablesDiv");
 
-    incrementnumberOfTables = function () {
-        numberOfTables++;
+    incrementnumberOfTables = function (index) {
+        numberOfTables = index;
         // console.log(numberOfTables);
     };
 
