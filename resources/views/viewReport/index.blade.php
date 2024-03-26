@@ -24,14 +24,15 @@
     <script src="{{ asset('modules/bootstrap2.min.js') }}"></script>
     <script src="{{ asset('modules/alpine.min.js') }}" defer></script>
     <script src="{{ asset('modules/popper.min.js') }}"></script>
-    <script src="{{ asset('modules/prism-json.min.js') }}"></script>
     <script src="{{ asset('modules/prism.js') }}"></script>
     <script src="{{ asset('modules/prism.min.js') }}"></script>
+    <script src="{{ asset('modules/prism-json.min.js') }}"></script>
     <script src="{{ asset('modules/cdn.min.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('modules/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('modules/bootstrap2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('modules/bootstrap3.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/container.css') }}">
+    <script src="{{ asset('js/download.js') }}"></script>
     @routes
 </head>
 
@@ -43,7 +44,10 @@
                     echo $name;
                 @endphp
             </h1>
-            <table class="table text-center">
+            <div class="text-right"><a href="" id="downloadButton" class="btn btn-primary mb-3"
+                    onclick="downloadTableAsExcel('{{ $name }}')">Download</a>
+            </div>
+            <table class="table text-center" id="content-table">
                 <thead>
                     <tr>
                         @if (count($data) > 0)

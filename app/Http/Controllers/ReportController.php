@@ -15,6 +15,7 @@ class ReportController extends Controller
         $emptyMap = [];
         $aliasofTables = [];
         $tableNames = [];
+        $currentItr = 0;
         foreach ($data['tables'] as $indexes => $tables) {
             foreach ($tables as $tablename => $columns) {
                 $tableNames[] = $tablename;
@@ -32,11 +33,12 @@ class ReportController extends Controller
                     if (isset ($emptyMap[$tablename][$column])) {
                         $emptyMap[$tablename][$column]++;
                     } else {
-                        $selectColumns[] = in_array($column, $duplicateKeys) != 0 ? "$aliasofTables[$indexes].$column as {$tablename}_{$column}" : "$tablename.$column";
+                        $selectColumns[] = in_array($column, $duplicateKeys) != 0 ? "$aliasofTables[$currentItr].$column as {$tablename}_{$column}" : "$tablename.$column";
                         $emptyMap[$tablename][$column] = 1;
                     }
                 }
             }
+            $currentItr++;
         }
         // dd($emptyMap);
         $selectColumns = implode(', ', $selectColumns);
