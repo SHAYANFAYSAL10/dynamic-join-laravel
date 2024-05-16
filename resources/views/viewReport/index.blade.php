@@ -33,12 +33,29 @@
     <link rel="stylesheet" href="{{ asset('modules/bootstrap3.min.css') }}">
     <link rel="stylesheet" href="{{ asset('css/container.css') }}">
     <script src="{{ asset('js/download.js') }}"></script>
+    <script src="{{ asset('js/changeDate.js') }}"></script>
     @routes
 </head>
 
 <body>
     <div class="container mt-5">
         <div class="flex justify-between items-center bg-gray-200 p-5 rounded-md">
+            <form id="dateForm">
+                <div class="form-row align-items-end">
+                    <div class="form-group col-md-5 col-sm-6">
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" class="form-control" id="startDate" name="startDate" required>
+                    </div>
+                    <div class="form-group col-md-5 col-sm-6">
+                        <label for="endDate">End Date:</label>
+                        <input type="date" class="form-control" id="endDate" name="endDate" required>
+                    </div>
+                    <div class="form-group col-md-2 col-sm-12">
+                        <a id="changeDateBtn" class="btn btn-primary w-100 mt-md-0 mt-4"
+                            onclick="showAllData()">View</a>
+                    </div>
+                </div>
+            </form>
             <h1>
                 @php
                     echo $name;

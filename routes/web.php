@@ -47,7 +47,7 @@ Route::post('/create-report/fetch_join_datas', [JoinController::class, 'fetch_jo
 Route::post('/create-report', [JoinController::class, 'processForm'])->name('adminViewCreate.processForm');
 
 // Route::Resource('/view-report', ReportController::class);
-Route::get('/view-report/{id}', [ReportController::class, 'showData'])->name('viewReport.index');
+Route::get('/view-report/{id}/{startDate?}/{endDate?}', [ReportController::class, 'showData'])->name('viewReport.index');
 Route::get('/view-report/{id}/delete', [ReportController::class, 'destroy']);
 Route::get('/view-report/{id}/edit', [ReportController::class, 'edit'])->name('adminViewCreate.edit');
 Route::post('/view-report/{id}/edit', [ReportController::class, 'editForm'])->name('adminViewCreate.editForm');

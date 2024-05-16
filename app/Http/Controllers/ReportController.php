@@ -19,7 +19,7 @@ class ReportController extends Controller
         foreach ($data['tables'] as $indexes => $tables) {
             foreach ($tables as $tablename => $columns) {
                 $tableNames[] = $tablename;
-                if (isset ($emptyMap[$tablename])) {
+                if (isset($emptyMap[$tablename])) {
                     $emptyMap[$tablename]['count']++;
                 } else {
                     $emptyMap[$tablename]['count'] = 1; // Initialize value to 1
@@ -30,7 +30,7 @@ class ReportController extends Controller
                 }
                 $aliasofTables[] = $tempAlias;
                 foreach ($columns as $column) {
-                    if (isset ($emptyMap[$tablename][$column])) {
+                    if (isset($emptyMap[$tablename][$column])) {
                         $emptyMap[$tablename][$column]++;
                     } else {
                         $selectColumns[] = in_array($column, $duplicateKeys) != 0 ? "$aliasofTables[$currentItr].$column as {$tablename}_{$column}" : "$tablename.$column";
@@ -76,13 +76,18 @@ class ReportController extends Controller
         return $duplicateKeys;
     }
 
-    public function showData($id)
+    public function showData($id, $startDate = null, $endDate = null)
     {
+        if ($startDate === null && $endDate === null) {
+            $endDate = date("Y-m-d");
+            $startDate = date("Y-m-d", strtotime("-6 months"));
+        }
         $report = Report::find($id);
         $data = $report->report_details;
         $name = $report->name;
         $duplicateKeys = $this->duplicateKeys($data);
         $result = $this->generateSqlQuery($data, $duplicateKeys);
+        $result .= "where date(created_at) between '" . $startDate . "' and '" . $endDate . "'";
         $result = DB::select($result);
         return view('viewReport.index', ['data' => $result, 'name' => $name]);
     }
@@ -122,12 +127,12 @@ class ReportController extends Controller
     public function editForm(Request $request, $id)
     {
         $users = $request['users'];
-        if (empty ($request['users'])) {
+        if (empty($request['users'])) {
             $users = [];
         }
         $name = $request['name'];
         $data = $request->except(['_token', 'table', 'users', 'name']);
-        if (!isset ($data['joins'])) {
+        if (!isset($data['joins'])) {
             $data['joins'] = [];
         }
         // dd($id);
