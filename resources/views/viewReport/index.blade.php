@@ -44,9 +44,6 @@
                     echo $name;
                 @endphp
             </h1>
-            <div class="text-right"><a href="" id="downloadButton" class="btn btn-primary mb-3"
-                    onclick="downloadTableAsExcel('{{ $name }}')">Download</a>
-            </div>
             <table class="table text-center" id="content-table">
                 <thead>
                     <tr>
@@ -71,6 +68,9 @@
                     @endif
                 </tbody>
             </table>
+            <div class="text-left"><a href="" id="downloadButton" class="btn btn-primary mb-3"
+                    onclick="downloadTableAsExcel('{{ $name }}')">Download</a>
+            </div>
         </div>
     </div>
 </body>
