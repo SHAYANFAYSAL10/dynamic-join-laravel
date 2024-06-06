@@ -28,9 +28,11 @@
     <script src="{{ asset('modules/prism.min.js') }}"></script>
     <script src="{{ asset('modules/prism-json.min.js') }}"></script>
     <script src="{{ asset('modules/cdn.min.js') }}"></script>
+    <script src="{{ asset('modules/dataTable.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('modules/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('modules/bootstrap2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('modules/bootstrap3.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('modules/dataTable.css') }}">
     <link rel="stylesheet" href="{{ asset('css/container.css') }}">
     <script src="{{ asset('js/download.js') }}"></script>
     <script src="{{ asset('js/changeDate.js') }}"></script>
@@ -90,6 +92,11 @@
             </div>
         </div>
     </div>
+    <script>
+        let table = new DataTable('.table', {
+            responsive: true
+        });
+    </script>
 </body>
 
 </html>

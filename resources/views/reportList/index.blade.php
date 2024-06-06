@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.25.0/themes/prism.min.css">
     <script src="{{ asset('js/modalVisibility.js') }}" defer></script>
     <link rel="stylesheet" href="{{ asset('css/container.css') }}">
+    <link rel="stylesheet" href="{{ asset('modules/dataTable.css') }}">
+    <script src="{{ asset('modules/dataTable.js') }}"></script>
     @routes
 </head>
 
@@ -122,7 +124,7 @@
                                     </td>
                                 @endforeach
                                 <td>
-                                    <a href="{{ url('/view-report/' . $report->id) }}" title="View Report Data"
+                                    <a href="{{ url('/view-reports/' . $report->id) }}" title="View Report Data"
                                         class="btn btn-info btn-sm">View</a>
                                     <a href="{{ url('view-report/' . $report->id . '/edit') }}"
                                         class="btn btn-warning text-white btn-sm">Edit</a>
@@ -139,6 +141,11 @@
             </table>
         </div>
     </div>
+    <script>
+        let table = new DataTable('.table', {
+            responsive: true
+        });
+    </script>
 </body>
 
 </html>

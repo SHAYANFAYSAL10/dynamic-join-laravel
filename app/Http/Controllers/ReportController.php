@@ -87,7 +87,7 @@ class ReportController extends Controller
         $name = $report->name;
         $duplicateKeys = $this->duplicateKeys($data);
         $result = $this->generateSqlQuery($data, $duplicateKeys);
-        $result .= "where date(created_at) between '" . $startDate . "' and '" . $endDate . "'";
+        $result .= "where date(" . key($data['tables'][0]) . ".created_at) between '" . $startDate . "' and '" . $endDate . "'";
         $result = DB::select($result);
         return view('viewReport.index', ['data' => $result, 'name' => $name]);
     }
