@@ -56,7 +56,12 @@
                         </div>
                     </div>
                 </div>
-                <div id="addTableDiv" class="mt-3" type="button">
+                <div>
+                    <select name="dateTable" id="dateTable" class="form-select mt-0" required>
+                        <option disabled selected value="">Select Table</option>
+                    </select>
+                </div>
+                <div id="addTableDiv" class="mt-4" type="button">
                     <button id="addTable" class="btn btn-secondary px-2 py-0"> + </button>
                 </div>
                 <div class="center-button">

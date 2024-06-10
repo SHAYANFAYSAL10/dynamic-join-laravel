@@ -232,6 +232,17 @@
                         @endphp
                     @endforeach
                 </div>
+                <div>
+                    <select name="dateTable" id="dateTable" class="form-select mt-0" required>
+                        @foreach ($report_details->tables as $tables)
+                            @foreach ($tables as $table => $columns)
+                                <option value="{{ $table }}"
+                                    {{ $report_details->dateTable === $table ? 'selected' : '' }}>
+                                    {{ $table }}</option>
+                            @endforeach
+                        @endforeach
+                    </select>
+                </div>
                 <div id="addTableDiv" class="mt-3" type="button">
                     <button id="addTable" class="btn btn-secondary px-2 py-0"> + </button>
                 </div>

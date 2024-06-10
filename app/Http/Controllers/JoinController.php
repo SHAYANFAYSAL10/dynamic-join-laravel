@@ -87,12 +87,12 @@ class JoinController extends Controller
     public function processForm(Request $request)
     {
         $users = $request['users'];
-        if (empty ($request['users'])) {
+        if (empty($request['users'])) {
             $users = [];
         }
         $name = $request['name'];
         $data = $request->except(['_token', 'table', 'users', 'name']);
-        if (!isset ($data['joins'])) {
+        if (!isset($data['joins'])) {
             $data['joins'] = [];
         }
         // dd($data);

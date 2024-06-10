@@ -83,10 +83,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function selectedTableNames() {
         tableNames = [];
+        let dateTable = document.getElementById("dateTable");
+        dateTable.innerHTML = "";
         for (let i = 0; i <= numberOfTables; i++) {
             let tableNo = document.getElementById(`table${i}`);
             if (tableNo) {
                 tableNames.push(tableNo.value);
+                const newOption = document.createElement("option");
+                newOption.value = tableNo.value;
+                newOption.text = tableNo.value;
+                dateTable.add(newOption);
             } else {
                 tableNames.push("");
             }
